@@ -28,6 +28,7 @@
       SAFE:   { hourly: 30, daily: 200, delay: [2800, 5200] },
       NORMAL: { hourly: 50, daily: 350, delay: [1800, 3600] },
       FAST:   { hourly: 70, daily: 450, delay: [1200, 2400] },
+      RAPID:  { hourly: 9999, daily: 9999, delay: [250, 500] },
     },
     mode: 'NORMAL',
     // Delays progression
@@ -45,7 +46,7 @@
     SHOW_GUI: true,
     THEME: 'AUTO', // AUTO | DARK | LIGHT
     // Misc
-    DEBUG: false
+    DEBUG: false,
   };
 
   // ===========================
@@ -73,10 +74,12 @@
         safe: 'Safe',
         normal: 'Normal',
         fast: 'Fast',
+        rapid: 'Rapid (High Risk)',
       },
       messages: {
         welcome: '🚀 Instagram Bulk Unfollow Tool v' + VERSION,
         needFollowing: '⚠️ Please open your Following list (Profile → Following) first.',
+        actionBlocked: '🚫 Action Blocked! Stopping to protect your account. Please wait 24-48 hours before trying again.',
         hourlyLimitWait: '⏸️ Hourly limit reached. Waiting',
         searchButtons: '🔍 Searching for accounts…',
         shortBreak: '☕ Short break',
@@ -85,6 +88,7 @@
         finished: '🏁 Completed',
       },
       texts: {
+        actionBlockedMessages: ['action blocked', 'try again later', 'limit'],
         following: [
           'following','abonné','abonnements','abonniert','seguiti','seguidos','seguintes','подписки','подписаны',
           'obserwowanie','obserwujesz'
@@ -120,10 +124,12 @@
         safe: 'Bezpieczny',
         normal: 'Normalny',
         fast: 'Szybki',
+        rapid: 'Rapid (Ryzykowny)',
       },
       messages: {
         welcome: '🚀 Instagram Bulk Unfollow Tool v' + VERSION,
         needFollowing: '⚠️ Otwórz najpierw listę Obserwowanych (Profil → Obserwujesz).',
+        actionBlocked: '🚫 Akcja zablokowana! Zatrzymuję, by chronić konto. Odczekaj 24-48h przed ponowną próbą.',
         hourlyLimitWait: '⏸️ Limit godzinowy osiągnięty. Czekam',
         searchButtons: '🔍 Szukam kont…',
         shortBreak: '☕ Krótka przerwa',
@@ -146,33 +152,33 @@
       }
     },
     ES: {
-      ui: { title:'Herramienta Unfollow Instagram', start:'Iniciar', pause:'Pausar', resume:'Reanudar', stop:'Detener', mode:'Modo', stats:'Estadísticas', unfollowed:'Dejados', hourly:'Por hora', rate:'Velocidad', time:'Tiempo', notFollowingList:'Abre tu lista de Siguiendo (Perfil → Siguiendo) y pulsa Iniciar', ready:'Listo. Pulsa Iniciar.', supportBox:'Esta herramienta es 100% GRATIS. Si te ayuda:', supportIG:'📸 Sigue a @psteczka en Instagram', supportGH:'⭐ Da estrella al repo en GitHub', safe:'Seguro', normal:'Normal', fast:'Rápido' },
-      messages: { welcome:'🚀 Instagram Bulk Unfollow Tool v'+VERSION, needFollowing:'⚠️ Abre primero tu lista de Siguiendo (Perfil → Siguiendo).', hourlyLimitWait:'⏸️ Límite horario alcanzado. Esperando', searchButtons:'🔍 Buscando cuentas…', shortBreak:'☕ Pausa corta', longBreak:'🍔 Pausa larga', progress:'📈 Progreso', finished:'🏁 Completado' },
+      ui: { title:'Herramienta Unfollow Instagram', start:'Iniciar', pause:'Pausar', resume:'Reanudar', stop:'Detener', mode:'Modo', stats:'Estadísticas', unfollowed:'Dejados', hourly:'Por hora', rate:'Velocidad', time:'Tiempo', notFollowingList:'Abre tu lista de Siguiendo (Perfil → Siguiendo) y pulsa Iniciar', ready:'Listo. Pulsa Iniciar.', supportBox:'Esta herramienta es 100% GRATIS. Si te ayuda:', supportIG:'📸 Sigue a @psteczka en Instagram', supportGH:'⭐ Da estrella al repo en GitHub', safe:'Seguro', normal:'Normal', fast:'Rápido', rapid: 'Rapid (Alto Riesgo)' },
+      messages: { welcome:'🚀 Instagram Bulk Unfollow Tool v'+VERSION, needFollowing:'⚠️ Abre primero tu lista de Siguiendo (Perfil → Siguiendo).', actionBlocked: '🚫 ¡Acción bloqueada! Deteniendo para proteger tu cuenta. Espera 24-48 horas.', hourlyLimitWait:'⏸️ Límite horario alcanzado. Esperando', searchButtons:'🔍 Buscando cuentas…', shortBreak:'☕ Pausa corta', longBreak:'🍔 Pausa larga', progress:'📈 Progreso', finished:'🏁 Completado' },
       texts: { following:['siguiendo','following','abonné','abonniert','seguiti','seguidos','seguintes','подписки','подписаны','obserwowanie','obserwujesz'], followState:['seguir','follow','suivre','folgen','segui','подписаться','obserwuj'], confirm:['dejar de seguir','unfollow','ne plus suivre','nicht mehr folgen','non seguire più','deixar de seguir','отписаться','przestań obserwować'], cancel:['cancelar','cancel','annuler','abbrechen','annulla','anuluj','отмена'] }
     },
     FR: {
-      ui: { title:'Outil Unfollow Instagram', start:'Démarrer', pause:'Pause', resume:'Reprendre', stop:'Arrêter', mode:'Mode', stats:'Statistiques', unfollowed:'Désabonnés', hourly:'Par heure', rate:'Vitesse', time:'Temps', notFollowingList:'Ouvrez votre liste Abonnements (Profil → Abonnements), puis Démarrer', ready:'Prêt. Cliquez Démarrer.', supportBox:'Cet outil est 100% GRATUIT. Si cela aide :', supportIG:'📸 Suivez @psteczka sur Instagram', supportGH:'⭐ Étoilez le repo GitHub', safe:'Sûr', normal:'Normal', fast:'Rapide' },
-      messages: { welcome:'🚀 Instagram Bulk Unfollow Tool v'+VERSION, needFollowing:'⚠️ Ouvrez d’abord votre liste d’Abonnements.', hourlyLimitWait:'⏸️ Limite horaire atteinte. Attente', searchButtons:'🔍 Recherche de comptes…', shortBreak:'☕ Pause courte', longBreak:'🍔 Pause longue', progress:'📈 Progression', finished:'🏁 Terminé' },
+      ui: { title:'Outil Unfollow Instagram', start:'Démarrer', pause:'Pause', resume:'Reprendre', stop:'Arrêter', mode:'Mode', stats:'Statistiques', unfollowed:'Désabonnés', hourly:'Par heure', rate:'Vitesse', time:'Temps', notFollowingList:'Ouvrez votre liste Abonnements (Profil → Abonnements), puis Démarrer', ready:'Prêt. Cliquez Démarrer.', supportBox:'Cet outil est 100% GRATUIT. Si cela aide :', supportIG:'📸 Suivez @psteczka sur Instagram', supportGH:'⭐ Étoilez le repo GitHub', safe:'Sûr', normal:'Normal', fast:'Rapide', rapid: 'Rapid (Risque Élevé)' },
+      messages: { welcome:'🚀 Instagram Bulk Unfollow Tool v'+VERSION, needFollowing:'⚠️ Ouvrez d’abord votre liste d’Abonnements.', actionBlocked: '🚫 Action bloquée ! Arrêt pour protéger votre compte. Veuillez attendre 24-48 heures.', hourlyLimitWait:'⏸️ Limite horaire atteinte. Attente', searchButtons:'🔍 Recherche de comptes…', shortBreak:'☕ Pause courte', longBreak:'🍔 Pause longue', progress:'📈 Progression', finished:'🏁 Terminé' },
       texts: { following:['abonné','abonnements','following','abonniert','seguiti','seguidos','seguintes','подписки','подписаны','obserwowanie','obserwujesz'], followState:['suivre','follow','folgen','segui','seguir','подписаться','obserwuj'], confirm:['ne plus suivre','unfollow','nicht mehr folgen','non seguire più','dejar de seguir','deixar de seguir','отписаться','przestań obserwować'], cancel:['annuler','cancel','abbrechen','annulla','cancelar','anuluj','отмена'] }
     },
     DE: {
-      ui: { title:'Instagram Unfollow Tool', start:'Starten', pause:'Pause', resume:'Fortsetzen', stop:'Stoppen', mode:'Modus', stats:'Statistiken', unfollowed:'Entfolgt', hourly:'Stündlich', rate:'Rate', time:'Zeit', notFollowingList:'Öffne deine Abonniert-Liste (Profil → Abonniert), dann Starten', ready:'Bereit. Klicke Starten.', supportBox:'Dieses Tool ist 100% KOSTENLOS. Wenn es hilft:', supportIG:'📸 Folge @psteczka auf Instagram', supportGH:'⭐ Sterne das GitHub-Repo', safe:'Sicher', normal:'Normal', fast:'Schnell' },
-      messages: { welcome:'🚀 Instagram Bulk Unfollow Tool v'+VERSION, needFollowing:'⚠️ Öffne zuerst deine Abonniert-Liste.', hourlyLimitWait:'⏸️ Stündliches Limit erreicht. Warte', searchButtons:'🔍 Suche Konten…', shortBreak:'☕ Kurze Pause', longBreak:'🍔 Lange Pause', progress:'📈 Fortschritt', finished:'🏁 Abgeschlossen' },
+      ui: { title:'Instagram Unfollow Tool', start:'Starten', pause:'Pause', resume:'Fortsetzen', stop:'Stoppen', mode:'Modus', stats:'Statistiken', unfollowed:'Entfolgt', hourly:'Stündlich', rate:'Rate', time:'Zeit', notFollowingList:'Öffne deine Abonniert-Liste (Profil → Abonniert), dann Starten', ready:'Bereit. Klicke Starten.', supportBox:'Dieses Tool ist 100% KOSTENLOS. Wenn es hilft:', supportIG:'📸 Folge @psteczka auf Instagram', supportGH:'⭐ Sterne das GitHub-Repo', safe:'Sicher', normal:'Normal', fast:'Schnell', rapid: 'Rapid (Hohes Risiko)' },
+      messages: { welcome:'🚀 Instagram Bulk Unfollow Tool v'+VERSION, needFollowing:'⚠️ Öffne zuerst deine Abonniert-Liste.', actionBlocked: '🚫 Aktion blockiert! Stoppe zum Schutz deines Kontos. Bitte warte 24-48 Stunden.', hourlyLimitWait:'⏸️ Stündliches Limit erreicht. Warte', searchButtons:'🔍 Suche Konten…', shortBreak:'☕ Kurze Pause', longBreak:'🍔 Lange Pause', progress:'📈 Fortschritt', finished:'🏁 Abgeschlossen' },
       texts: { following:['abonniert','following','abonné','abonnements','seguiti','seguidos','seguintes','подписки','подписаны','obserwowanie','obserwujesz'], followState:['folgen','follow','suivre','segui','seguir','подписаться','obserwuj'], confirm:['nicht mehr folgen','unfollow','ne plus suivre','non seguire più','dejar de seguir','deixar de seguir','отписаться','przestań obserwować'], cancel:['abbrechen','cancel','annuler','annulla','cancelar','anuluj','отмена'] }
     },
     PT: {
-      ui: { title:'Ferramenta Unfollow Instagram', start:'Iniciar', pause:'Pausar', resume:'Retomar', stop:'Parar', mode:'Modo', stats:'Estatísticas', unfollowed:'Deixou de seguir', hourly:'Por hora', rate:'Taxa', time:'Tempo', notFollowingList:'Abra sua lista de Seguindo (Perfil → Seguindo) e Iniciar', ready:'Pronto. Clique Iniciar.', supportBox:'Esta ferramenta é 100% GRÁTIS. Se ajudar:', supportIG:'📸 Siga @psteczka no Instagram', supportGH:'⭐ Dê estrela no GitHub', safe:'Seguro', normal:'Normal', fast:'Rápido' },
-      messages: { welcome:'🚀 Instagram Bulk Unfollow Tool v'+VERSION, needFollowing:'⚠️ Abra primeiro sua lista de Seguindo.', hourlyLimitWait:'⏸️ Limite por hora atingido. Aguardando', searchButtons:'🔍 Procurando contas…', shortBreak:'☕ Pausa curta', longBreak:'🍔 Pausa longa', progress:'📈 Progresso', finished:'🏁 Concluído' },
+      ui: { title:'Ferramenta Unfollow Instagram', start:'Iniciar', pause:'Pausar', resume:'Retomar', stop:'Parar', mode:'Modo', stats:'Estatísticas', unfollowed:'Deixou de seguir', hourly:'Por hora', rate:'Taxa', time:'Tempo', notFollowingList:'Abra sua lista de Seguindo (Perfil → Seguindo) e Iniciar', ready:'Pronto. Clique Iniciar.', supportBox:'Esta ferramenta é 100% GRÁTIS. Se ajudar:', supportIG:'📸 Siga @psteczka no Instagram', supportGH:'⭐ Dê estrela no GitHub', safe:'Seguro', normal:'Normal', fast:'Rápido', rapid: 'Rapid (Alto Risco)' },
+      messages: { welcome:'🚀 Instagram Bulk Unfollow Tool v'+VERSION, needFollowing:'⚠️ Abra primeiro sua lista de Seguindo.', actionBlocked: '🚫 Ação bloqueada! Parando para proteger sua conta. Aguarde 24-48 horas.', hourlyLimitWait:'⏸️ Limite por hora atingido. Aguardando', searchButtons:'🔍 Procurando contas…', shortBreak:'☕ Pausa curta', longBreak:'🍔 Pausa longa', progress:'📈 Progresso', finished:'🏁 Concluído' },
       texts: { following:['seguintes','seguindo','following','abonné','abonniert','seguiti','seguidos','подписки','подписаны','obserwowanie','obserwujesz'], followState:['seguir','follow','suivre','folgen','segui','подписаться','obserwuj'], confirm:['deixar de seguir','unfollow','ne plus suivre','nicht mehr folgen','non seguire più','dejar de seguir','отписаться','przestań obserwować'], cancel:['cancelar','cancel','annuler','abbrechen','annulla','anuluj','отмена'] }
     },
     RU: {
-      ui: { title:'Инструмент Unfollow Instagram', start:'Старт', pause:'Пауза', resume:'Продолжить', stop:'Стоп', mode:'Режим', stats:'Статистика', unfollowed:'Отписался', hourly:'В час', rate:'Скорость', time:'Время', notFollowingList:'Откройте список Подписок (Профиль → Подписки), затем Старт', ready:'Готово. Нажмите Старт.', supportBox:'Инструмент 100% БЕСПЛАТНЫЙ. Если помогает:', supportIG:'📸 Подпишитесь на @psteczka', supportGH:'⭐ Поставьте звезду на GitHub', safe:'Безопасный', normal:'Обычный', fast:'Быстрый' },
-      messages: { welcome:'🚀 Instagram Bulk Unfollow Tool v'+VERSION, needFollowing:'⚠️ Сначала откройте список Подписок.', hourlyLimitWait:'⏸️ Почасовой лимит достигнут. Ожидание', searchButtons:'🔍 Поиск аккаунтов…', shortBreak:'☕ Короткий перерыв', longBreak:'🍔 Долгий перерыв', progress:'📈 Прогресс', finished:'🏁 Завершено' },
+      ui: { title:'Инструмент Unfollow Instagram', start:'Старт', pause:'Пауза', resume:'Продолжить', stop:'Стоп', mode:'Режим', stats:'Статистика', unfollowed:'Отписался', hourly:'В час', rate:'Скорость', time:'Время', notFollowingList:'Откройте список Подписок (Профиль → Подписки), затем Старт', ready:'Готово. Нажмите Старт.', supportBox:'Инструмент 100% БЕСПЛАТНЫЙ. Если помогает:', supportIG:'📸 Подпишитесь на @psteczka', supportGH:'⭐ Поставьте звезду на GitHub', safe:'Безопасный', normal:'Обычный', fast:'Быстрый', rapid: 'Rapid (Высокий риск)' },
+      messages: { welcome:'🚀 Instagram Bulk Unfollow Tool v'+VERSION, needFollowing:'⚠️ Сначала откройте список Подписок.', actionBlocked: '🚫 Действие заблокировано! Остановка для защиты вашего аккаунта. Подождите 24-48 часов.', hourlyLimitWait:'⏸️ Почасовой лимит достигнут. Ожидание', searchButtons:'🔍 Поиск аккаунтов…', shortBreak:'☕ Короткий перерыв', longBreak:'🍔 Долгий перерыв', progress:'📈 Прогресс', finished:'🏁 Завершено' },
       texts: { following:['подписки','подписаны','following','abonné','abonniert','seguiti','seguidos','seguintes','obserwowanie','obserwujesz'], followState:['подписаться','follow','suivre','folgen','segui','seguir','obserwuj'], confirm:['отписаться','unfollow','ne plus suivre','nicht mehr folgen','non seguire più','dejar de seguir','deixar de seguir','przestań obserwować'], cancel:['отмена','cancel','annuler','abbrechen','annulla','cancelar','anuluj'] }
     },
     IT: {
-      ui: { title:'Strumento Unfollow Instagram', start:'Inizia', pause:'Pausa', resume:'Riprendi', stop:'Ferma', mode:'Modalità', stats:'Statistiche', unfollowed:'Non segui più', hourly:'Orario', rate:'Velocità', time:'Tempo', notFollowingList:'Apri la lista Seguiti (Profilo → Seguiti), poi Inizia', ready:'Pronto. Clicca Inizia.', supportBox:'Questo strumento è 100% GRATUITO. Se aiuta:', supportIG:'📸 Segui @psteczka su Instagram', supportGH:'⭐ Metti stella al repo su GitHub', safe:'Sicuro', normal:'Normale', fast:'Veloce' },
-      messages: { welcome:'🚀 Instagram Bulk Unfollow Tool v'+VERSION, needFollowing:'⚠️ Vai prima alla lista Seguiti.', hourlyLimitWait:'⏸️ Limite orario raggiunto. In attesa', searchButtons:'🔍 Cerco account…', shortBreak:'☕ Pausa breve', longBreak:'🍔 Pausa lunga', progress:'📈 Progresso', finished:'🏁 Completato' },
+      ui: { title:'Strumento Unfollow Instagram', start:'Inizia', pause:'Pausa', resume:'Riprendi', stop:'Ferma', mode:'Modalità', stats:'Statistiche', unfollowed:'Non segui più', hourly:'Orario', rate:'Velocità', time:'Tempo', notFollowingList:'Apri la lista Seguiti (Profilo → Seguiti), poi Inizia', ready:'Pronto. Clicca Inizia.', supportBox:'Questo strumento è 100% GRATUITO. Se aiuta:', supportIG:'📸 Segui @psteczka su Instagram', supportGH:'⭐ Metti stella al repo su GitHub', safe:'Sicuro', normal:'Normale', fast:'Veloce', rapid: 'Rapid (Alto Rischio)' },
+      messages: { welcome:'🚀 Instagram Bulk Unfollow Tool v'+VERSION, needFollowing:'⚠️ Vai prima alla lista Seguiti.', actionBlocked: '🚫 Azione bloccata! Interruzione per proteggere il tuo account. Attendi 24-48 ore.', hourlyLimitWait:'⏸️ Limite orario raggiunto. In attesa', searchButtons:'🔍 Cerco account…', shortBreak:'☕ Pausa breve', longBreak:'🍔 Pausa lunga', progress:'📈 Progresso', finished:'🏁 Completato' },
       texts: { following:['seguiti','following','abonné','abonniert','seguidos','seguintes','подписки','подписаны','obserwowanie','obserwujesz'], followState:['segui','follow','suivre','folgen','seguir','подписаться','obserwuj'], confirm:['non seguire più','unfollow','ne plus suivre','nicht mehr folgen','dejar de seguir','deixar de seguir','отписаться','przestań obserwować'], cancel:['annulla','cancel','annuler','abbrechen','cancelar','anuluj','отмена'] }
     }
   };
@@ -236,6 +242,24 @@
   const processedRows = new WeakSet();
   const processedUsers = new Set();
 
+  function loadProcessedUsers() {
+    try {
+      const stored = localStorage.getItem('igUnfollowTool_processedUsers');
+      if (stored) {
+        const usersArray = JSON.parse(stored);
+        usersArray.forEach(user => processedUsers.add(user));
+        console.log(`📈 Loaded ${processedUsers.size} previously processed users from cache.`);
+      }
+    } catch (e) { console.error("Could not load processed users", e); }
+  }
+
+  function saveProcessedUsers() {
+    try {
+      const usersArray = [...processedUsers];
+      localStorage.setItem('igUnfollowTool_processedUsers', JSON.stringify(usersArray));
+    } catch (e) { console.error("Could not save processed users", e); }
+  }
+
   function findNextFollowing() {
     const btns = Array.from(document.querySelectorAll('button'));
     for (const b of btns) {
@@ -248,6 +272,16 @@
       if (!row) continue;
       if (processedRows.has(row)) continue;
       if (row.dataset.processed === '1') continue;
+
+      // Check against list of users already processed in previous sessions
+      const username = extractUsername(row);
+      if (username && processedUsers.has(norm(username))) {
+          if (CONFIG.DEBUG) console.log(`[Cache] Skipping already processed user: ${username}`);
+          processedRows.add(row); // Mark row for this session to avoid re-checking
+          row.dataset.processed = '1';
+          continue;
+      }
+
       return {btn:b, row};
     }
     return null;
@@ -312,7 +346,41 @@
     running: false,
     paused: false,
     errors: 0,
+    totalFollowing: null,
   };
+
+  function getTotalFollowingCount() {
+    try {
+        const links = Array.from(document.querySelectorAll('a'));
+        // Find the link to the "following" list, which is usually on the main profile.
+        const followingLink = links.find(a => a.href && a.href.endsWith('/following/'));
+        if (!followingLink) return null;
+
+        // Instagram's structure changes, so we try a few methods.
+        // Method 1: Find a span inside the link that contains only a number.
+        const spans = Array.from(followingLink.querySelectorAll('span'));
+        for (const span of spans) {
+            const text = (span.innerText || span.textContent || '').trim();
+            // Test if the span's content is a number (possibly with commas/dots).
+            if (/^[\d,.\s]+$/.test(text) && /\d/.test(text)) {
+                const num = parseInt(text.replace(/[.,\s]/g, ''), 10);
+                if (!isNaN(num)) return num;
+            }
+        }
+
+        // Method 2: Fallback to the link's full text content.
+        const text = (followingLink.innerText || followingLink.textContent || '').trim();
+        const match = text.match(/([\d,.\s]+)/);
+        if (match) {
+            const num = parseInt(match[1].replace(/[.,\s]/g, ''), 10);
+            if (!isNaN(num)) return num;
+        }
+    } catch (e) {
+        console.error("Error getting total following count:", e);
+        return null;
+    }
+    return null;
+  }
 
   function currentLimits() {
     return CONFIG.MODES[CONFIG.mode];
@@ -366,6 +434,7 @@
                 <option value="SAFE">🛡️ ${L.ui.safe} (30/h)</option>
                 <option value="NORMAL" selected>⚖️ ${L.ui.normal} (50/h)</option>
                 <option value="FAST">🚀 ${L.ui.fast} (70/h)</option>
+                <option value="RAPID">☠️ ${L.ui.rapid}</option>
               </select>
             </div>
             <div class="iguf-buttons">
@@ -453,7 +522,8 @@
         background: linear-gradient(135deg,#E1306C,#FD1D1D); color:#fff; border:0;
       }
       .iguf-buttons button:disabled{ opacity:.5; cursor:not-allowed; }
-      .iguf-panel{ border:1px solid ${themeDark?'#2b2b2b':'#eaeaea'}; border-radius:12px; overflow:hidden; }
+      .iguf-panel{ border:1px solid ${themeDark?'#2b2b2b':'#eaeaea'}; border-radius:12px; overflow:hidden; margin-top: 12px; }
+      .iguf-controls { margin-bottom: 0; }
       .iguf-panel-title{ padding:10px 12px; font-weight:700; background:${themeDark?'#1a1a1a':'#fafafa'}; border-bottom:1px solid ${themeDark?'#2b2b2b':'#eaeaea'}; }
       .iguf-stats{ display:grid; grid-template-columns: repeat(2,1fr); gap:8px; padding:12px; }
       .iguf-stat{ background:${themeDark?'#161616':'#fff'}; border:1px solid ${themeDark?'#2b2b2b':'#eaeaea'}; border-radius:10px; padding:10px; }
@@ -513,6 +583,14 @@
         alert(L.messages.needFollowing);
         return;
       }
+      stats.totalFollowing = getTotalFollowingCount();
+      if (stats.totalFollowing) {
+        console.log(`📊 Found total following count: ${stats.totalFollowing}`);
+      } else {
+        console.log("Could not determine total following count, using daily limits for progress.");
+      }
+      updateStatsGUI(); // Initial update with total count
+
       status.textContent = '✅ ' + L.ui.ready;
       startBtn.disabled = true; pauseBtn.disabled = false; stopBtn.disabled = false;
       stats.running = true; stats.paused = false; stats.start = Date.now(); stats.lastHourReset = Date.now();
@@ -557,14 +635,22 @@
 
     const minutes = Math.max(0, Math.round((Date.now()-stats.start)/60000));
     const rate = minutes>0 ? (stats.unfollowed/(minutes/60)).toFixed(1) : '0';
-    const dayPct = Math.min(100, Math.round( (stats.unfollowed / limits.daily) * 100 ));
 
-    if (unfEl) unfEl.textContent = String(stats.unfollowed);
+    const totalForProgress = stats.totalFollowing || limits.daily;
+    const progressPct = Math.min(100, Math.round((stats.unfollowed / totalForProgress) * 100));
+
+    if (unfEl) {
+        if (stats.totalFollowing) {
+            unfEl.textContent = `${stats.unfollowed} / ${stats.totalFollowing}`;
+        } else {
+            unfEl.textContent = String(stats.unfollowed);
+        }
+    }
     if (hourEl) hourEl.textContent = `${stats.hourly}/${limits.hourly}`;
     if (rateEl) rateEl.textContent = `${rate}/h`;
     if (timeEl) timeEl.textContent = `${minutes}m`;
-    if (bar) bar.style.width = `${dayPct}%`;
-    if (pct) pct.textContent = `${dayPct}%`;
+    if (bar) bar.style.width = `${progressPct}%`;
+    if (pct) pct.textContent = `${progressPct}%`;
   }
 
   // ===========================
@@ -599,14 +685,16 @@
           stats.lastHourReset = Date.now();
           continue;
         }
-        if (stats.unfollowed >= limits.daily) {
+        if (stats.totalFollowing === null && stats.unfollowed >= limits.daily) {
           console.log(`✅ ${L.messages.finished}. ${L.messages.progress}: ${stats.unfollowed}/${limits.daily}`);
           break;
         }
 
         // Behavior
-        await human.scroll();
-        await human.misclick();
+        if (CONFIG.mode !== 'RAPID') {
+            await human.scroll();
+            await human.misclick();
+        }
 
         // Find next "Following"
         let found = findNextFollowing();
@@ -636,7 +724,9 @@
         // Scroll into view and click
         followingBtn.scrollIntoView({ behavior:'smooth', block:'center' });
         await delay(rand(350,700));
-        await human.hesitate();
+        if (CONFIG.mode !== 'RAPID') {
+            await human.hesitate();
+        }
         followingBtn.click();
 
         // Confirm dialog (exact matching preferred)
@@ -654,11 +744,35 @@
 
         // Wait row state becomes "Follow"
         const ok = await waitRowBecameUnfollowed(row, 6000);
-        if (!ok && CONFIG.DEBUG) console.log('⚠️ State did not switch to Follow for', username);
+        if (!ok) {
+          console.log('⚠️ State did not switch to Follow for', username);
+          const dialog = topDialog();
+          // Use English as the base for detection keywords, as they are often not translated
+          const blockKeywords = LANGS.EN.texts.actionBlockedMessages;
+          let isBlocked = false;
+
+          if (dialog && textIncludesAny(dialog, blockKeywords)) {
+            isBlocked = true;
+          } else {
+            // If no dialog, a persistent failure to change state is also a strong indicator of a block.
+            console.log('No blocking dialog, but treating as a potential block due to timeout.');
+            isBlocked = true;
+          }
+
+          if (isBlocked) {
+             stats.running = false;
+             const msg = L.messages.actionBlocked || LANGS.EN.messages.actionBlocked;
+             console.error(msg);
+             alert(msg);
+             if (GUI) GUI.status.textContent = '🚫 ' + msg;
+             break; // Exit the while loop
+          }
+        }
 
         // Mark processed
         processedRows.add(row); row.dataset.processed='1';
         processedUsers.add(username);
+        saveProcessedUsers(); // Persist progress
 
         stats.unfollowed++;
         stats.hourly++;
@@ -678,15 +792,17 @@
         await delay(rand(minD,maxD));
 
         // Breaks
-        if (stats.unfollowed>0 && stats.unfollowed % CONFIG.MINI_BREAK_EVERY === 0) {
-          const t = rand(...CONFIG.MINI_BREAK_TIME);
-          console.log(`${L.messages.shortBreak} ${Math.round(t/1000)}s`);
-          await delay(t);
-        }
-        if (stats.unfollowed>0 && stats.unfollowed % CONFIG.LONG_BREAK_EVERY === 0) {
-          const t = rand(...CONFIG.LONG_BREAK_TIME);
-          console.log(`${L.messages.longBreak} ${Math.round(t/60000)}m · ${L.messages.progress}: ${stats.unfollowed}/${limits.daily}`);
-          await delay(t);
+        if (CONFIG.mode !== 'RAPID') {
+            if (stats.unfollowed>0 && stats.unfollowed % CONFIG.MINI_BREAK_EVERY === 0) {
+              const t = rand(...CONFIG.MINI_BREAK_TIME);
+              console.log(`${L.messages.shortBreak} ${Math.round(t/1000)}s`);
+              await delay(t);
+            }
+            if (stats.unfollowed>0 && stats.unfollowed % CONFIG.LONG_BREAK_EVERY === 0) {
+              const t = rand(...CONFIG.LONG_BREAK_TIME);
+              console.log(`${L.messages.longBreak} ${Math.round(t/60000)}m · ${L.messages.progress}: ${stats.unfollowed}/${limits.daily}`);
+              await delay(t);
+            }
         }
 
       } catch (e) {
@@ -716,6 +832,7 @@
   // ===========================
   // INIT
   // ===========================
+  loadProcessedUsers();
   if (CONFIG.SHOW_GUI) buildGUI();
   else {
     // No GUI: run if already on following list
