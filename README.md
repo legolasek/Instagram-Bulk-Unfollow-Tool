@@ -42,20 +42,22 @@ This tool is 100% FREE. If it saves you time:
 Tip: Console scripts die on page reload. Keep the tab open.
 
 ### Features
-- 🎛️ GUI (Start/Pause/Stop), live stats, progress bar.
-- 🔄 Loop‑safe algorithm: click “Following” → confirm in dialog → wait row becomes “Follow” → mark processed → scroll.
-- 🧠 Human‑like pacing: randomized delays, hesitation/misclicks, gentle scroll.
-- 🛡️ Smart limits per mode + progressive slowdown (+400 ms per 100 unfollows).
-- 📈 Stats: unfollowed count, hourly usage, rate/h, elapsed time, daily progress.
+- 🎛️ GUI (Start/Pause/Stop) with live stats and a real-time progress bar.
+- 💾 **Progress Saving**: Remembers who you've already unfollowed between sessions.
+- 🛡️ **Action Block Detection**: Automatically stops the script if it detects that Instagram has blocked you.
+- 📈 **Smarter Stats**: Reads your total "following" count to provide accurate progress (e.g., "50 / 750").
+- 🔄 Loop‑safe algorithm: never re‑follows the same account.
+- 🧠 Human‑like pacing (in Safe/Normal/Fast modes) to reduce risk.
 
 ### Modes & Limits
-| Mode   | Hourly | Daily | Base delay (ms) |
-|--------|--------|-------|-----------------|
-| Safe   | 30/h   | 200   | 2800–5200       |
-| Normal | 50/h   | 350   | 1800–3600       |
-| Fast   | 70/h   | 450   | 1200–2400       |
+| Mode   | Hourly | Daily | Base delay (ms) | Notes |
+|--------|--------|-------|-----------------|-------|
+| Safe   | 30/h   | 200   | 2800–5200       | Human-like breaks and pacing. |
+| Normal | 50/h   | 350   | 1800–3600       | Human-like breaks and pacing. |
+| Fast   | 70/h   | 450   | 1200–2400       | Human-like breaks and pacing. |
+| Rapid  | ∞      | ∞     | 250-500         | **High Risk.** No human-like breaks. Stops on block. |
 
-Breaks: short every 10, long every 50 (randomized). Progressive slowdown prevents spikes.
+Breaks in Safe/Normal/Fast modes: short every 10, long every 50 (randomized). Progressive slowdown prevents spikes.
 
 ### Safety Guidelines
 - Start with 10–20 to test; prefer Safe/Normal if you had recent blocks.
@@ -96,20 +98,22 @@ Breaks: short every 10, long every 50 (randomized). Progressive slowdown prevent
 Uwaga: przeładowanie strony kończy działanie skryptu – trzymaj kartę otwartą.
 
 ### Funkcje
-- 🎛️ GUI (Start/Pauza/Stop), statystyki na żywo, pasek postępu.
-- 🔄 Algorytm bez pętli: klik “Obserwowanie/Following” → potwierdzenie w oknie → czekanie aż wiersz zmieni się na “Obserwuj/Follow” → oznaczenie → przewinięcie.
-- 🧠 Naturalne tempo: opóźnienia, wahanie, scroll.
-- 🛡️ Limity per tryb + progresywne spowalnianie (+400 ms co 100 unfollow).
-- 📈 Statystyki: licznik, godzinowy, tempo/h, czas, progres dzienny.
+- 🎛️ GUI (Start/Pauza/Stop) ze statystykami i paskiem postępu w czasie rzeczywistym.
+- 💾 **Zapisywanie Postępów**: Pamięta, które konta już usunięto, nawet między sesjami.
+- 🛡️ **Wykrywanie Blokad**: Automatycznie zatrzymuje skrypt, jeśli wykryje blokadę ze strony Instagrama.
+- 📈 **Inteligentne Statystyki**: Odczytuje całkowitą liczbę obserwowanych, aby pokazać precyzyjny postęp (np. "50 / 750").
+- 🔄 Algorytm bez pętli: nigdy nie odobserwuje i zaobserwuje tego samego konta.
+- 🧠 Naturalne tempo (w trybach Safe/Normal/Fast) w celu zmniejszenia ryzyka.
 
 ### Tryby i limity
-| Tryb   | Godzinowo | Dziennie | Bazowy delay (ms) |
-|--------|-----------|----------|-------------------|
-| Safe   | 30/h      | 200      | 2800–5200         |
-| Normal | 50/h      | 350      | 1800–3600         |
-| Fast   | 70/h      | 450      | 1200–2400         |
+| Tryb   | Godzinowo | Dziennie | Bazowy delay (ms) | Uwagi |
+|--------|-----------|----------|-------------------|-------|
+| Safe   | 30/h      | 200      | 2800–5200         | Ludzkie przerwy i tempo. |
+| Normal | 50/h      | 350      | 1800–3600         | Ludzkie przerwy i tempo. |
+| Fast   | 70/h      | 450      | 1200–2400         | Ludzkie przerwy i tempo. |
+| Rapid  | ∞         | ∞        | 250-500           | **Wysokie Ryzyko.** Brak przerw. Zatrzymuje się po blokadzie. |
 
-Przerwy: krótka co 10, długa co 50 (losowe). Progresywne spowalnianie zmniejsza ryzyko blokad.
+Przerwy w trybach Safe/Normal/Fast: krótka co 10, długa co 50 (losowe). Progresywne spowalnianie zmniejsza ryzyko blokad.
 
 ### Bezpieczeństwo
 - Zacznij od 10–20 testowo; jeśli były blokady – tryb Safe/Normal.
@@ -145,11 +149,11 @@ GUI al estilo Instagram, funciona en el navegador (sin API/instalaciones), a pru
 3) Elige modo → Iniciar.
 
 ### Funciones
-- GUI con estadísticas en vivo, barra de progreso
-- Algoritmo sin bucles
-- Comportamiento humano
-- Límites inteligentes por modo + desaceleración progresiva
-- Estadísticas: dejados de seguir, por hora, velocidad, tiempo, progreso diario
+- GUI con estadísticas en vivo y barra de progreso
+- **Guardado de Progreso**: Recuerda a quién has dejado de seguir.
+- **Detección de Bloqueo**: Se detiene si Instagram te bloquea.
+- **Estadísticas Inteligentes**: Lee tu número total de "siguiendo".
+- Modo **Rapid (Alto Riesgo)** para máxima velocidad.
 
 ### Modos y límites
 | Modo   | Por hora | Diario | Delay base (ms) |
@@ -157,8 +161,9 @@ GUI al estilo Instagram, funciona en el navegador (sin API/instalaciones), a pru
 | Safe   | 30/h     | 200    | 2800–5200       |
 | Normal | 50/h     | 350    | 1800–3600       |
 | Fast   | 70/h     | 450    | 1200–2400       |
+| Rapid  | ∞        | ∞      | 250-500         |
 
-Seguridad: empieza con 10–20; si hay bloqueos, usa Safe/Normal. Detente si ves “Action Blocked”.
+Seguridad: empieza con 10–20. Detente si ves “Action Blocked”.
 
 Soporte: 100% GRATIS → 📸 @psteczka · ⭐ Estrella el repo.  
 Licencia: MIT
@@ -176,11 +181,11 @@ Interface type Instagram, 100% navigateur (sans API/installation), anti‑boucle
 3) Choisissez un mode → Démarrer.
 
 ### Fonctionnalités
-- GUI avec stats en direct et barre de progression
-- Algorithme anti‑boucle
-- Comportement humain
-- Limites intelligentes + ralentissement progressif
-- Stats: désabonnés, par heure, vitesse, temps, progression
+- GUI avec stats en direct et barre de progression.
+- **Sauvegarde de la Progression**: Mémorise les comptes déjà traités.
+- **Détection de Blocage**: S'arrête automatiquement si Instagram vous bloque.
+- **Statistiques Intelligentes**: Lit votre nombre total d'abonnements.
+- Mode **Rapid (Risque Élevé)** pour une vitesse maximale.
 
 ### Modes & limites
 | Mode   | Par heure | Jour | Délai de base (ms) |
@@ -188,8 +193,9 @@ Interface type Instagram, 100% navigateur (sans API/installation), anti‑boucle
 | Safe   | 30/h      | 200  | 2800–5200          |
 | Normal | 50/h      | 350  | 1800–3600          |
 | Fast   | 70/h      | 450  | 1200–2400          |
+| Rapid  | ∞         | ∞    | 250-500            |
 
-Sécurité: commencez petit; stop si “Action Blocked”.  
+Sécurité: commencez petit. Arrêtez si “Action Blocked”.
 Support: 100% GRATUIT → 📸 @psteczka · ⭐ Repo GitHub.  
 Licence: MIT
 
@@ -206,11 +212,11 @@ Instagram‑ähnliches GUI, im Browser (ohne API/Install), loop‑sicher, mehrsp
 3) Modus wählen → Starten.
 
 ### Funktionen
-- GUI mit Live‑Statistiken, Fortschrittsbalken
-- Loop‑sicherer Algorithmus
-- Menschliches Verhalten
-- Intelligente Limits + progressive Verlangsamung
-- Stats: entfolgt, stündlich, Rate, Zeit, Tagesfortschritt
+- GUI mit Live-Statistiken und Fortschrittsbalken.
+- **Fortschrittsspeicherung**: Merkt sich, wem du bereits entfolgt bist.
+- **Block-Erkennung**: Stoppt automatisch, wenn Instagram dich blockiert.
+- **Intelligente Statistiken**: Liest deine Gesamtzahl der "Abonniert".
+- **Rapid-Modus (Hohes Risiko)** für maximale Geschwindigkeit.
 
 ### Modi & Limits
 | Modus  | Stündlich | Täglich | Basis‑Delay (ms) |
@@ -218,8 +224,9 @@ Instagram‑ähnliches GUI, im Browser (ohne API/Install), loop‑sicher, mehrsp
 | Safe   | 30/h      | 200     | 2800–5200        |
 | Normal | 50/h      | 350     | 1800–3600        |
 | Fast   | 70/h      | 450     | 1200–2400        |
+| Rapid  | ∞         | ∞       | 250-500          |
 
-Sicherheit: klein anfangen; bei “Action Blocked” stoppen.  
+Sicherheit: klein anfangen. Bei “Action Blocked” stoppen.
 Support: 100% KOSTENLOS → 📸 @psteczka · ⭐ Stern.  
 Lizenz: MIT
 
@@ -236,11 +243,11 @@ GUI estilo Instagram, no navegador (sem API/instalação), sem loops, multilíng
 3) Escolha o modo → Iniciar.
 
 ### Recursos
-- GUI com estatísticas ao vivo, barra de progresso
-- Algoritmo anti‑loop
-- Comportamento humano
-- Limites por modo + desaceleração progressiva
-- Stats: deixados, por hora, taxa, tempo, progresso diário
+- GUI com estatísticas e barra de progresso em tempo real.
+- **Salvar Progresso**: Lembra de quem você já deixou de seguir.
+- **Detecção de Bloqueio**: Para automaticamente se o Instagram te bloquear.
+- **Estatísticas Inteligentes**: Lê o número total de "seguindo".
+- Modo **Rapid (Alto Risco)** para velocidade máxima.
 
 ### Modos & Limites
 | Modo   | Por hora | Diário | Delay base (ms) |
@@ -248,8 +255,9 @@ GUI estilo Instagram, no navegador (sem API/instalação), sem loops, multilíng
 | Safe   | 30/h     | 200    | 2800–5200       |
 | Normal | 50/h     | 350    | 1800–3600       |
 | Fast   | 70/h     | 450    | 1200–2400       |
+| Rapid  | ∞        | ∞      | 250-500         |
 
-Segurança: comece com pouco; pare se “Action Blocked”.  
+Segurança: comece com pouco. Pare se “Action Blocked”.
 Suporte: 100% GRÁTIS → 📸 @psteczka · ⭐ Estrela.  
 Licença: MIT
 
@@ -266,11 +274,11 @@ GUI в стиле Instagram, работает в браузере (без API/у
 3) Выберите режим → Старт.
 
 ### Возможности
-- GUI с лайв‑статистикой, прогресс‑бар
-- Алгоритм без повторной подписки
-- Человеческое поведение
-- Умные лимиты + прогрессивное замедление
-- Статы: отписки, в час, скорость, время, дневной прогресс
+- GUI с лайв-статистикой и прогресс-баром.
+- **Сохранение прогресса**: Запоминает, от кого вы уже отписались.
+- **Обнаружение блокировки**: Автоматически останавливается, если Instagram вас блокирует.
+- **Умная статистика**: Считывает общее количество ваших подписок.
+- Режим **Rapid (Высокий риск)** для максимальной скорости.
 
 ### Режимы и лимиты
 | Режим  | В час | В день | Базовая задержка (мс) |
@@ -278,8 +286,9 @@ GUI в стиле Instagram, работает в браузере (без API/у
 | Safe   | 30/ч  | 200    | 2800–5200              |
 | Normal | 50/ч  | 350    | 1800–3600              |
 | Fast   | 70/ч  | 450    | 1200–2400              |
+| Rapid  | ∞     | ∞      | 250-500                |
 
-Безопасность: начните с малого; при “Action Blocked” — остановка 24–48 ч.  
+Безопасность: начните с малого. При “Action Blocked” — остановитесь.
 Поддержка: 100% БЕСПЛАТНО → 📸 @psteczka · ⭐ Звезда.  
 Лицензия: MIT
 
@@ -296,11 +305,11 @@ GUI in stile Instagram, nel browser (senza API/installazioni), sicuro contro i l
 3) Scegli modalità → Inizia.
 
 ### Funzioni
-- GUI con statistiche live, barra progresso
-- Algoritmo senza loop
-- Comportamento umano
-- Limiti per modalità + rallentamento progressivo
-- Stat: non segui più, orario, velocità, tempo, progresso giornaliero
+- GUI con statistiche e barra di avanzamento in tempo reale.
+- **Salvataggio Progressi**: Ricorda chi hai già smesso di seguire.
+- **Rilevamento Blocchi**: Si ferma automaticamente se Instagram ti blocca.
+- **Statistiche Intelligenti**: Legge il tuo numero totale di "seguiti".
+- Modalità **Rapid (Rischio Elevato)** per la massima velocità.
 
 ### Modalità & Limiti
 | Modalità | Orario | Giorno | Delay base (ms) |
@@ -308,8 +317,9 @@ GUI in stile Instagram, nel browser (senza API/installazioni), sicuro contro i l
 | Safe     | 30/h   | 200    | 2800–5200       |
 | Normal   | 50/h   | 350    | 1800–3600       |
 | Fast     | 70/h   | 450    | 1200–2400       |
+| Rapid    | ∞      | ∞      | 250-500         |
 
-Sicurezza: inizia con poco; stop se “Action Blocked”.  
+Sicurezza: inizia con poco. Fermati se vedi “Action Blocked”.
 Supporto: 100% GRATUITO → 📸 @psteczka · ⭐ Stella.  
 Licenza: MIT
 
