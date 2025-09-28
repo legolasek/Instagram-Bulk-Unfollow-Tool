@@ -1,513 +1,734 @@
 /**
- * Instagram Bulk Unfollow Tool v0.1.2
- * Repository: https://github.com/legolasek/Instagram-Bulk-Unfollow-Tool
- * Created by: @psteczka (https://www.instagram.com/psteczka)
- * License: MIT
+ * Instagram Bulk Unfollow Tool v1.2 (Multilingual + Beautiful GUI)
+ * 100% FREE. If this helps you:
+ *  - 📸 Follow: https://www.instagram.com/psteczka  (@psteczka)
+ *  - ⭐ Star:   https://github.com/legolasek/Instagram-Bulk-Unfollow-Tool
+ *
+ * Paste this entire script into the browser console on your Instagram "Following" list.
  */
 
-(async function() {
+(async function () {
   'use strict';
 
-  // Show support message
-  console.log(`
-  🚀 Instagram Bulk Unfollow Tool v0.1.2
-  ═══════════════════════════════════════
-  
-  👨‍💻 Created by: @psteczka
-  📸 Instagram: https://www.instagram.com/psteczka
-  ⭐ GitHub: https://github.com/legolasek/Instagram-Bulk-Unfollow-Tool
-  
-  💝 If this tool helps you, please consider:
-  🔸 Following me on Instagram: @psteczka
-  🔸 Giving this repo a ⭐ star on GitHub
-  
-  ═══════════════════════════════════════
-  `);
+  // ===========================
+  // BASIC VALIDATION
+  // ===========================
+  if (!location.hostname.includes('instagram.com')) {
+    alert('⚠️ This script works only on instagram.com');
+    return;
+  }
 
   // ===========================
-  // KONFIGURACJA
+  // CONFIG
   // ===========================
-  
+  const VERSION = '1.2';
   const CONFIG = {
-    TOTAL_LIMIT: 3000,           // Całkowity limit
-    FIRST_HOUR_LIMIT: 60,        // Pierwsza godzina (świeży start)
-    NORMAL_HOUR_LIMIT: 40,       // Kolejne godziny
-    DAILY_LIMIT: 400,            // Dzienny limit
-    
-    // Opóźnienia (w ms)
-    MIN_DELAY: 1500,             // Minimalne opóźnienie
-    MAX_DELAY: 4000,             // Maksymalne opóźnienie
-    MINI_BREAK_EVERY: 10,        // Co ile krótka przerwa
-    LONG_BREAK_EVERY: 50,        // Co ile długa przerwa
-    MINI_BREAK_TIME: [15000, 30000],   // 15-30 sekund
-    LONG_BREAK_TIME: [60000, 120000],  // 1-2 minuty
-    
-    // Nowe opcje
-    SHOW_GUI: true,              // Pokaż GUI
-    DRY_RUN: false,              // Tryb testowy
+    // Modes
+    MODES: {
+      SAFE:   { hourly: 30, daily: 200, delay: [2800, 5200] },
+      NORMAL: { hourly: 50, daily: 350, delay: [1800, 3600] },
+      FAST:   { hourly: 70, daily: 450, delay: [1200, 2400] },
+    },
+    mode: 'NORMAL',
+    // Delays progression
+    PROGRESSIVE_STEP_PER_100: 400, // +ms per 100 unfollows
+    // Breaks
+    MINI_BREAK_EVERY: 10,
+    LONG_BREAK_EVERY: 50,
+    MINI_BREAK_TIME: [15000, 30000],
+    LONG_BREAK_TIME: [60000, 120000],
+    // Behavior
+    HESITATION_CHANCE: 0.1,
+    MISCLICK_CHANCE: 0.02,
+    RANDOM_SCROLL_CHANCE: 0.3,
+    // UI
+    SHOW_GUI: true,
+    THEME: 'AUTO', // AUTO | DARK | LIGHT
+    // Misc
+    DEBUG: false
   };
-  
+
   // ===========================
-  // FUNKCJE
+  // LANGUAGE PACKS (UI + Texts)
   // ===========================
-  
-  const random = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
-  const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-  const getTime = () => new Date().toLocaleTimeString();
-  
-  // STATYSTYKI
-  let stats = {
-    unfollowed: 0,
-    hourlyCount: 0,
-    sessionStart: Date.now(),
-    lastHourReset: Date.now(),
-    errors: 0,
-    currentHourLimit: CONFIG.FIRST_HOUR_LIMIT,
-    isRunning: false,
-    isPaused: false
-  };
-  
-  // FUNKCJA ZNAJDOWANIA PRZYCISKÓW
-  const findButton = (texts) => {
-    const buttons = document.querySelectorAll("button");
-    for(let btn of buttons) {
-      if(btn.textContent) {
-        const btnText = btn.textContent.toLowerCase();
-        for(let text of texts) {
-          if(btnText.includes(text.toLowerCase())) {
-            return btn;
-          }
-        }
+  const LANGS = {
+    EN: {
+      ui: {
+        title: 'Instagram Unfollow Tool',
+        start: 'Start',
+        pause: 'Pause',
+        resume: 'Resume',
+        stop: 'Stop',
+        mode: 'Mode',
+        stats: 'Statistics',
+        unfollowed: 'Unfollowed',
+        hourly: 'Hourly',
+        rate: 'Rate',
+        time: 'Time',
+        notFollowingList: 'Open your Following list (Profile → Following), then press Start',
+        ready: 'Ready. Press Start to begin.',
+        supportBox: 'This tool is 100% FREE. If it helps you:',
+        supportIG: '📸 Follow @psteczka on Instagram',
+        supportGH: '⭐ Star the GitHub repo',
+        safe: 'Safe',
+        normal: 'Normal',
+        fast: 'Fast',
+      },
+      messages: {
+        welcome: '🚀 Instagram Bulk Unfollow Tool v' + VERSION,
+        needFollowing: '⚠️ Please open your Following list (Profile → Following) first.',
+        hourlyLimitWait: '⏸️ Hourly limit reached. Waiting',
+        searchButtons: '🔍 Searching for accounts…',
+        shortBreak: '☕ Short break',
+        longBreak: '🍔 Long break',
+        progress: '📈 Progress',
+        finished: '🏁 Completed',
+      },
+      texts: {
+        following: [
+          'following','abonné','abonnements','abonniert','seguiti','seguidos','seguintes','подписки','подписаны',
+          'obserwowanie','obserwujesz'
+        ],
+        followState: [
+          'follow','suivre','folgen','segui','seguir','seguir','подписаться','obserwuj'
+        ],
+        confirm: [
+          'unfollow','ne plus suivre','nicht mehr folgen','non seguire più',
+          'dejar de seguir','deixar de seguir','отписаться','przestań obserwować'
+        ],
+        cancel: ['cancel','anuluj','annuler','abbrechen','annulla','cancelar','отмена']
       }
+    },
+    PL: {
+      ui: {
+        title: 'Narzędzie Unfollow Instagram',
+        start: 'Start',
+        pause: 'Pauza',
+        resume: 'Wznów',
+        stop: 'Stop',
+        mode: 'Tryb',
+        stats: 'Statystyki',
+        unfollowed: 'Odobserwowano',
+        hourly: 'Na godzinę',
+        rate: 'Tempo',
+        time: 'Czas',
+        notFollowingList: 'Otwórz listę Obserwowanych (Profil → Obserwujesz), potem kliknij Start',
+        ready: 'Gotowe. Kliknij Start aby zacząć.',
+        supportBox: 'To narzędzie jest w 100% DARMOWE. Jeśli Ci pomaga:',
+        supportIG: '📸 Zaobserwuj @psteczka na Instagramie',
+        supportGH: '⭐ Daj gwiazdkę repo na GitHub',
+        safe: 'Bezpieczny',
+        normal: 'Normalny',
+        fast: 'Szybki',
+      },
+      messages: {
+        welcome: '🚀 Instagram Bulk Unfollow Tool v' + VERSION,
+        needFollowing: '⚠️ Otwórz najpierw listę Obserwowanych (Profil → Obserwujesz).',
+        hourlyLimitWait: '⏸️ Limit godzinowy osiągnięty. Czekam',
+        searchButtons: '🔍 Szukam kont…',
+        shortBreak: '☕ Krótka przerwa',
+        longBreak: '🍔 Długa przerwa',
+        progress: '📈 Postęp',
+        finished: '🏁 Zakończono',
+      },
+      texts: {
+        following: [
+          'obserwowanie','obserwujesz','following','abonné','abonniert','seguiti','seguidos','seguintes','подписки','подписаны'
+        ],
+        followState: [
+          'obserwuj','follow','suivre','folgen','segui','seguir','подписаться'
+        ],
+        confirm: [
+          'przestań obserwować','unfollow','ne plus suivre','nicht mehr folgen',
+          'non seguire più','dejar de seguir','deixar de seguir','отписаться'
+        ],
+        cancel: ['anuluj','cancel','annuler','abbrechen','annulla','cancelar','отмена']
+      }
+    },
+    ES: {
+      ui: { title:'Herramienta Unfollow Instagram', start:'Iniciar', pause:'Pausar', resume:'Reanudar', stop:'Detener', mode:'Modo', stats:'Estadísticas', unfollowed:'Dejados', hourly:'Por hora', rate:'Velocidad', time:'Tiempo', notFollowingList:'Abre tu lista de Siguiendo (Perfil → Siguiendo) y pulsa Iniciar', ready:'Listo. Pulsa Iniciar.', supportBox:'Esta herramienta es 100% GRATIS. Si te ayuda:', supportIG:'📸 Sigue a @psteczka en Instagram', supportGH:'⭐ Da estrella al repo en GitHub', safe:'Seguro', normal:'Normal', fast:'Rápido' },
+      messages: { welcome:'🚀 Instagram Bulk Unfollow Tool v'+VERSION, needFollowing:'⚠️ Abre primero tu lista de Siguiendo (Perfil → Siguiendo).', hourlyLimitWait:'⏸️ Límite horario alcanzado. Esperando', searchButtons:'🔍 Buscando cuentas…', shortBreak:'☕ Pausa corta', longBreak:'🍔 Pausa larga', progress:'📈 Progreso', finished:'🏁 Completado' },
+      texts: { following:['siguiendo','following','abonné','abonniert','seguiti','seguidos','seguintes','подписки','подписаны','obserwowanie','obserwujesz'], followState:['seguir','follow','suivre','folgen','segui','подписаться','obserwuj'], confirm:['dejar de seguir','unfollow','ne plus suivre','nicht mehr folgen','non seguire più','deixar de seguir','отписаться','przestań obserwować'], cancel:['cancelar','cancel','annuler','abbrechen','annulla','anuluj','отмена'] }
+    },
+    FR: {
+      ui: { title:'Outil Unfollow Instagram', start:'Démarrer', pause:'Pause', resume:'Reprendre', stop:'Arrêter', mode:'Mode', stats:'Statistiques', unfollowed:'Désabonnés', hourly:'Par heure', rate:'Vitesse', time:'Temps', notFollowingList:'Ouvrez votre liste Abonnements (Profil → Abonnements), puis Démarrer', ready:'Prêt. Cliquez Démarrer.', supportBox:'Cet outil est 100% GRATUIT. Si cela aide :', supportIG:'📸 Suivez @psteczka sur Instagram', supportGH:'⭐ Étoilez le repo GitHub', safe:'Sûr', normal:'Normal', fast:'Rapide' },
+      messages: { welcome:'🚀 Instagram Bulk Unfollow Tool v'+VERSION, needFollowing:'⚠️ Ouvrez d’abord votre liste d’Abonnements.', hourlyLimitWait:'⏸️ Limite horaire atteinte. Attente', searchButtons:'🔍 Recherche de comptes…', shortBreak:'☕ Pause courte', longBreak:'🍔 Pause longue', progress:'📈 Progression', finished:'🏁 Terminé' },
+      texts: { following:['abonné','abonnements','following','abonniert','seguiti','seguidos','seguintes','подписки','подписаны','obserwowanie','obserwujesz'], followState:['suivre','follow','folgen','segui','seguir','подписаться','obserwuj'], confirm:['ne plus suivre','unfollow','nicht mehr folgen','non seguire più','dejar de seguir','deixar de seguir','отписаться','przestań obserwować'], cancel:['annuler','cancel','abbrechen','annulla','cancelar','anuluj','отмена'] }
+    },
+    DE: {
+      ui: { title:'Instagram Unfollow Tool', start:'Starten', pause:'Pause', resume:'Fortsetzen', stop:'Stoppen', mode:'Modus', stats:'Statistiken', unfollowed:'Entfolgt', hourly:'Stündlich', rate:'Rate', time:'Zeit', notFollowingList:'Öffne deine Abonniert-Liste (Profil → Abonniert), dann Starten', ready:'Bereit. Klicke Starten.', supportBox:'Dieses Tool ist 100% KOSTENLOS. Wenn es hilft:', supportIG:'📸 Folge @psteczka auf Instagram', supportGH:'⭐ Sterne das GitHub-Repo', safe:'Sicher', normal:'Normal', fast:'Schnell' },
+      messages: { welcome:'🚀 Instagram Bulk Unfollow Tool v'+VERSION, needFollowing:'⚠️ Öffne zuerst deine Abonniert-Liste.', hourlyLimitWait:'⏸️ Stündliches Limit erreicht. Warte', searchButtons:'🔍 Suche Konten…', shortBreak:'☕ Kurze Pause', longBreak:'🍔 Lange Pause', progress:'📈 Fortschritt', finished:'🏁 Abgeschlossen' },
+      texts: { following:['abonniert','following','abonné','abonnements','seguiti','seguidos','seguintes','подписки','подписаны','obserwowanie','obserwujesz'], followState:['folgen','follow','suivre','segui','seguir','подписаться','obserwuj'], confirm:['nicht mehr folgen','unfollow','ne plus suivre','non seguire più','dejar de seguir','deixar de seguir','отписаться','przestań obserwować'], cancel:['abbrechen','cancel','annuler','annulla','cancelar','anuluj','отмена'] }
+    },
+    PT: {
+      ui: { title:'Ferramenta Unfollow Instagram', start:'Iniciar', pause:'Pausar', resume:'Retomar', stop:'Parar', mode:'Modo', stats:'Estatísticas', unfollowed:'Deixou de seguir', hourly:'Por hora', rate:'Taxa', time:'Tempo', notFollowingList:'Abra sua lista de Seguindo (Perfil → Seguindo) e Iniciar', ready:'Pronto. Clique Iniciar.', supportBox:'Esta ferramenta é 100% GRÁTIS. Se ajudar:', supportIG:'📸 Siga @psteczka no Instagram', supportGH:'⭐ Dê estrela no GitHub', safe:'Seguro', normal:'Normal', fast:'Rápido' },
+      messages: { welcome:'🚀 Instagram Bulk Unfollow Tool v'+VERSION, needFollowing:'⚠️ Abra primeiro sua lista de Seguindo.', hourlyLimitWait:'⏸️ Limite por hora atingido. Aguardando', searchButtons:'🔍 Procurando contas…', shortBreak:'☕ Pausa curta', longBreak:'🍔 Pausa longa', progress:'📈 Progresso', finished:'🏁 Concluído' },
+      texts: { following:['seguintes','seguindo','following','abonné','abonniert','seguiti','seguidos','подписки','подписаны','obserwowanie','obserwujesz'], followState:['seguir','follow','suivre','folgen','segui','подписаться','obserwuj'], confirm:['deixar de seguir','unfollow','ne plus suivre','nicht mehr folgen','non seguire più','dejar de seguir','отписаться','przestań obserwować'], cancel:['cancelar','cancel','annuler','abbrechen','annulla','anuluj','отмена'] }
+    },
+    RU: {
+      ui: { title:'Инструмент Unfollow Instagram', start:'Старт', pause:'Пауза', resume:'Продолжить', stop:'Стоп', mode:'Режим', stats:'Статистика', unfollowed:'Отписался', hourly:'В час', rate:'Скорость', time:'Время', notFollowingList:'Откройте список Подписок (Профиль → Подписки), затем Старт', ready:'Готово. Нажмите Старт.', supportBox:'Инструмент 100% БЕСПЛАТНЫЙ. Если помогает:', supportIG:'📸 Подпишитесь на @psteczka', supportGH:'⭐ Поставьте звезду на GitHub', safe:'Безопасный', normal:'Обычный', fast:'Быстрый' },
+      messages: { welcome:'🚀 Instagram Bulk Unfollow Tool v'+VERSION, needFollowing:'⚠️ Сначала откройте список Подписок.', hourlyLimitWait:'⏸️ Почасовой лимит достигнут. Ожидание', searchButtons:'🔍 Поиск аккаунтов…', shortBreak:'☕ Короткий перерыв', longBreak:'🍔 Долгий перерыв', progress:'📈 Прогресс', finished:'🏁 Завершено' },
+      texts: { following:['подписки','подписаны','following','abonné','abonniert','seguiti','seguidos','seguintes','obserwowanie','obserwujesz'], followState:['подписаться','follow','suivre','folgen','segui','seguir','obserwuj'], confirm:['отписаться','unfollow','ne plus suivre','nicht mehr folgen','non seguire più','dejar de seguir','deixar de seguir','przestań obserwować'], cancel:['отмена','cancel','annuler','abbrechen','annulla','cancelar','anuluj'] }
+    },
+    IT: {
+      ui: { title:'Strumento Unfollow Instagram', start:'Inizia', pause:'Pausa', resume:'Riprendi', stop:'Ferma', mode:'Modalità', stats:'Statistiche', unfollowed:'Non segui più', hourly:'Orario', rate:'Velocità', time:'Tempo', notFollowingList:'Apri la lista Seguiti (Profilo → Seguiti), poi Inizia', ready:'Pronto. Clicca Inizia.', supportBox:'Questo strumento è 100% GRATUITO. Se aiuta:', supportIG:'📸 Segui @psteczka su Instagram', supportGH:'⭐ Metti stella al repo su GitHub', safe:'Sicuro', normal:'Normale', fast:'Veloce' },
+      messages: { welcome:'🚀 Instagram Bulk Unfollow Tool v'+VERSION, needFollowing:'⚠️ Vai prima alla lista Seguiti.', hourlyLimitWait:'⏸️ Limite orario raggiunto. In attesa', searchButtons:'🔍 Cerco account…', shortBreak:'☕ Pausa breve', longBreak:'🍔 Pausa lunga', progress:'📈 Progresso', finished:'🏁 Completato' },
+      texts: { following:['seguiti','following','abonné','abonniert','seguidos','seguintes','подписки','подписаны','obserwowanie','obserwujesz'], followState:['segui','follow','suivre','folgen','seguir','подписаться','obserwuj'], confirm:['non seguire più','unfollow','ne plus suivre','nicht mehr folgen','dejar de seguir','deixar de seguir','отписаться','przestań obserwować'], cancel:['annulla','cancel','annuler','abbrechen','cancelar','anuluj','отмена'] }
+    }
+  };
+
+  function detectLang() {
+    const code = (document.documentElement.lang || 'en').slice(0,2).toUpperCase();
+    return LANGS[code] ? LANGS[code] : LANGS.EN;
+  }
+  const L = detectLang();
+
+  // ===========================
+  // HELPERS
+  // ===========================
+  const rand = (a,b) => Math.floor(Math.random()*(b-a+1))+a;
+  const delay = (ms) => new Promise(r=>setTimeout(r,ms));
+  const now = () => new Date().toLocaleTimeString();
+  const norm = (s) => (s||'').toString().trim().toLowerCase();
+
+  // EXACT match against array
+  const textEqualsAny = (el, arr) => arr.some(t => norm(el.innerText||el.textContent) === norm(t));
+  // Includes against array
+  const textIncludesAny = (el, arr) => arr.some(t => (el.innerText||el.textContent||'').toLowerCase().includes(t.toLowerCase()));
+
+  const waitFor = async (fn, timeout=5000, step=100) => {
+    const t0 = Date.now();
+    let out;
+    while (Date.now()-t0 < timeout) {
+      out = fn();
+      if (out) return out;
+      await delay(step);
     }
     return null;
   };
-  
-  // ZACHOWANIA
-  const humanBehavior = {
-    mouseMove: (element) => {
-      ['mouseenter', 'mouseover', 'mousemove'].forEach(eventType => {
-        element.dispatchEvent(new MouseEvent(eventType, {
-          view: window,
-          bubbles: true,
-          cancelable: true
-        }));
-      });
-    },
-    
-    randomScroll: async () => {
-      if(Math.random() < 0.3) {
-        const direction = Math.random() < 0.7 ? 1 : -1; // 70% szans przewijania w dół
-        const amount = random(50, 200) * direction;
-        window.scrollBy({
-          top: amount,
-          behavior: 'smooth'
-        });
-        await delay(random(300, 700));
-      }
-    },
-    
-    hesitate: async () => {
-      if(Math.random() < 0.1) { // 10% szans na wahanie
-        console.log("💭 Moment wahania...");
-        await delay(random(1000, 2500));
-      }
-    },
-    
-    misclick: async () => {
-      if(Math.random() < 0.02) { // 2% szans na "missclick"
-        console.log("👆 Oops, missclick!");
-        document.body.click();
-        await delay(random(500, 1000));
-      }
+
+  // ===========================
+  // CORE: Row / Buttons
+  // ===========================
+  function extractUsername(scope) {
+    const anchors = Array.from(scope.querySelectorAll('a[href^="/"]'));
+    for (const a of anchors) {
+      const href = a.getAttribute('href')||'';
+      const m = href.match(/^\/([^\/?#]+)\/?$/);
+      if (!m) continue;
+      const candidate = m[1];
+      if (['p','reel','explore','stories','accounts','direct','about','graphql'].includes(candidate)) continue;
+      return candidate;
     }
+    return null;
+  }
+
+  function findRow(el) {
+    let cur = el;
+    for (let i=0;i<12 && cur;i++) {
+      if (cur.matches('li,[role="listitem"]')) return cur;
+      if (extractUsername(cur)) return cur;
+      cur = cur.parentElement;
+    }
+    return el?.closest('div')||el?.parentElement||null;
+  }
+
+  const processedRows = new WeakSet();
+  const processedUsers = new Set();
+
+  function findNextFollowing() {
+    const btns = Array.from(document.querySelectorAll('button'));
+    for (const b of btns) {
+      const t = norm(b.innerText||b.textContent);
+      if (!t) continue;
+      // Only "following" states, never "follow"
+      const isFollowingState = L.texts.following.some(x => t === norm(x));
+      if (!isFollowingState) continue;
+      const row = findRow(b);
+      if (!row) continue;
+      if (processedRows.has(row)) continue;
+      if (row.dataset.processed === '1') continue;
+      return {btn:b, row};
+    }
+    return null;
+  }
+
+  function topDialog() {
+    const list = Array.from(document.querySelectorAll('div[role="dialog"],div[role="alertdialog"],div[aria-modal="true"]'));
+    return list.length ? list[list.length-1] : null;
+  }
+
+  function findConfirmBtn() {
+    const layer = topDialog() || document.body;
+    const btns = Array.from(layer.querySelectorAll('button'));
+    // exact match preferred
+    for (const b of btns) if (textEqualsAny(b, L.texts.confirm)) return b;
+    // fallback: includes (safer with more languages)
+    for (const b of btns) if (textIncludesAny(b, L.texts.confirm)) return b;
+    return null;
+  }
+
+  async function waitRowBecameUnfollowed(row, timeout=6000) {
+    return await waitFor(() => {
+      const btn = row.querySelector('button');
+      if (!btn) return false;
+      // Check it became "Follow" state
+      return textIncludesAny(btn, L.texts.followState);
+    }, timeout);
+  }
+
+  // ===========================
+  // HUMAN BEHAVIOR
+  // ===========================
+  const human = {
+    scroll: async () => {
+      if (Math.random() < CONFIG.RANDOM_SCROLL_CHANCE) {
+        window.scrollBy({ top: rand(100, 260), behavior: 'smooth' });
+        await delay(rand(300,700));
+      }
+    },
+    hesitate: async () => {
+      if (Math.random() < CONFIG.HESITATION_CHANCE) {
+        console.log('💭', now());
+        await delay(rand(700,1600));
+      }
+    },
+    misclick: async () => {
+      if (Math.random() < CONFIG.MISCLICK_CHANCE) {
+        document.body.click();
+        await delay(rand(200,600));
+      }
+    },
   };
-  
-  // FUNKCJA PROGRESYWNEGO SPOWALNIANIA
-  const getProgressiveDelay = () => {
-    const factor = Math.floor(stats.unfollowed / 100); // Co 100 unfollow zwiększ delay
-    const additionalDelay = factor * 500; // +0.5s co 100 unfollow
-    return [
-      CONFIG.MIN_DELAY + additionalDelay,
-      CONFIG.MAX_DELAY + additionalDelay
-    ];
+
+  // ===========================
+  // STATS
+  // ===========================
+  const stats = {
+    unfollowed: 0,
+    hourly: 0,
+    lastHourReset: Date.now(),
+    start: Date.now(),
+    running: false,
+    paused: false,
+    errors: 0,
   };
+
+  function currentLimits() {
+    return CONFIG.MODES[CONFIG.mode];
+  }
+
+  function progressiveDelayBase() {
+    const factor = Math.floor(stats.unfollowed / 100) * CONFIG.PROGRESSIVE_STEP_PER_100;
+    const base = currentLimits().delay;
+    return [base[0]+factor, base[1]+factor];
+  }
 
   // ===========================
   // GUI
   // ===========================
-  
-  function createGUI() {
+  let GUI = null;
+  function buildGUI() {
     if (!CONFIG.SHOW_GUI) return;
-    
-    const gui = document.createElement('div');
-    gui.id = 'unfollow-gui';
-    gui.innerHTML = `
-      <div style="
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        width: 300px;
-        background: #1a1a1a;
-        border: 1px solid #333;
-        border-radius: 12px;
-        padding: 20px;
-        z-index: 999999;
-        font-family: Arial, sans-serif;
-        color: white;
-        box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-      ">
-        <div style="text-align: center; margin-bottom: 15px;">
-          <h3 style="margin: 0; color: #E1306C;">🚀 Unfollow Tool</h3>
-          <div style="font-size: 12px; color: #888;">v0.1.2 by @psteczka</div>
-        </div>
-        
-        <div style="margin-bottom: 15px;">
-          <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-            <span>Odobserwowano:</span>
-            <span id="gui-unfollowed" style="color: #4CAF50; font-weight: bold;">0</span>
+
+    const themeDark = (() => {
+      if (CONFIG.THEME === 'DARK') return true;
+      if (CONFIG.THEME === 'LIGHT') return false;
+      // AUTO: detect background
+      try {
+        const bg = getComputedStyle(document.body).backgroundColor || '';
+        // crude detect
+        return !bg || bg.includes('rgb(0, 0, 0)') || bg.includes('rgba(0, 0, 0') || document.documentElement.classList.contains('dark');
+      } catch { return true; }
+    })();
+
+    const wrap = document.createElement('div');
+    wrap.id = 'ig-unfollow-gui';
+    wrap.innerHTML = `
+      <div class="iguf-window">
+        <div class="iguf-header">
+          <div class="iguf-title">
+            <span class="iguf-logo">📱</span>
+            <span>${L.ui.title} · v${VERSION}</span>
           </div>
-          <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-            <span>Godzinowo:</span>
-            <span id="gui-hourly" style="color: #FF9800; font-weight: bold;">0/60</span>
-          </div>
-          <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-            <span>Tempo:</span>
-            <span id="gui-rate" style="color: #2196F3; font-weight: bold;">0/h</span>
-          </div>
-          <div style="display: flex; justify-content: space-between;">
-            <span>Czas:</span>
-            <span id="gui-time" style="color: #9C27B0; font-weight: bold;">0m</span>
+          <div class="iguf-actions">
+            <button class="iguf-min">−</button>
+            <button class="iguf-close">×</button>
           </div>
         </div>
-        
-        <div style="text-align: center; margin-bottom: 15px;">
-          <button id="gui-start" style="
-            background: #4CAF50;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            margin-right: 5px;
-            font-weight: bold;
-          ">▶ Start</button>
-          <button id="gui-pause" style="
-            background: #FF9800;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            margin-right: 5px;
-            font-weight: bold;
-          " disabled>⏸ Pauza</button>
-          <button id="gui-stop" style="
-            background: #F44336;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: bold;
-          " disabled>⏹ Stop</button>
+        <div class="iguf-body">
+          <div class="iguf-status" id="iguf-status">${L.ui.notFollowingList}</div>
+
+          <div class="iguf-controls">
+            <div class="iguf-select">
+              <label>${L.ui.mode}</label>
+              <select id="iguf-mode">
+                <option value="SAFE">🛡️ ${L.ui.safe} (30/h)</option>
+                <option value="NORMAL" selected>⚖️ ${L.ui.normal} (50/h)</option>
+                <option value="FAST">🚀 ${L.ui.fast} (70/h)</option>
+              </select>
+            </div>
+            <div class="iguf-buttons">
+              <button id="iguf-start" class="primary">${L.ui.start}</button>
+              <button id="iguf-pause" disabled>${L.ui.pause}</button>
+              <button id="iguf-stop" disabled>${L.ui.stop}</button>
+            </div>
+          </div>
+
+          <div class="iguf-panel">
+            <div class="iguf-panel-title">📊 ${L.ui.stats}</div>
+            <div class="iguf-stats">
+              <div class="iguf-stat">
+                <div class="label">${L.ui.unfollowed}</div>
+                <div class="value" id="iguf-unf">0</div>
+              </div>
+              <div class="iguf-stat">
+                <div class="label">${L.ui.hourly}</div>
+                <div class="value" id="iguf-hour">0/${currentLimits().hourly}</div>
+              </div>
+              <div class="iguf-stat">
+                <div class="label">${L.ui.rate}</div>
+                <div class="value" id="iguf-rate">0/h</div>
+              </div>
+              <div class="iguf-stat">
+                <div class="label">${L.ui.time}</div>
+                <div class="value" id="iguf-time">0m</div>
+              </div>
+            </div>
+            <div class="iguf-progress">
+              <div class="bar"><div class="fill" id="iguf-bar" style="width:0%"></div></div>
+              <div class="pct" id="iguf-pct">0%</div>
+            </div>
+          </div>
+
+          <div class="iguf-support">
+            <div>${L.ui.supportBox}</div>
+            <a href="https://www.instagram.com/psteczka" target="_blank">${L.ui.supportIG}</a>
+            <a href="https://github.com/legolasek/Instagram-Bulk-Unfollow-Tool" target="_blank">${L.ui.supportGH}</a>
+          </div>
         </div>
-        
-        <div style="font-size: 11px; color: #666; text-align: center;">
-          <div>💝 If this helps you:</div>
-          <div>📸 Follow @psteczka on Instagram</div>
-          <div>⭐ Star on GitHub</div>
-        </div>
-        
-        <button onclick="this.parentElement.parentElement.remove()" style="
-          position: absolute;
-          top: 5px;
-          right: 5px;
-          background: none;
-          border: none;
-          color: #666;
-          cursor: pointer;
-          font-size: 16px;
-        ">×</button>
       </div>
     `;
-    
-    document.body.appendChild(gui);
-    
-    // Event listeners
-    document.getElementById('gui-start').onclick = () => {
-      if (!stats.isRunning) {
-        startUnfollow();
+
+    const style = document.createElement('style');
+    style.textContent = `
+      #ig-unfollow-gui { position:fixed; top:20px; right:20px; z-index:999999; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; }
+      #ig-unfollow-gui * { box-sizing: border-box; }
+      .iguf-window{
+        width: 360px;
+        border-radius: 14px;
+        overflow: hidden;
+        box-shadow: 0 16px 40px rgba(0,0,0,.35);
+        background:${themeDark ? '#121212' : '#ffffff'};
+        color:${themeDark ? '#fff' : '#222'};
+        border: 1px solid ${themeDark ? '#2b2b2b' : '#eaeaea'};
       }
+      .iguf-header{
+        background: linear-gradient(135deg,#E1306C,#FD1D1D,#FCAF45);
+        padding: 12px 14px;
+        color:#fff;
+        display:flex;align-items:center;justify-content:space-between;
+      }
+      .iguf-title{ display:flex; align-items:center; gap:8px; font-weight:700; }
+      .iguf-actions button{
+        background: rgba(255,255,255,.2); color:#fff;border:0; border-radius:6px; padding:2px 8px; cursor:pointer; margin-left:6px;
+      }
+      .iguf-body{ padding:14px; }
+      .iguf-status{
+        padding:10px 12px; border-radius:10px; background:${themeDark?'#1d1d1d':'#fafafa'}; border:1px solid ${themeDark?'#2b2b2b':'#eaeaea'};
+        font-size:13px; margin-bottom:12px;
+      }
+      .iguf-controls{ display:flex; gap:10px; align-items:flex-end; margin-bottom:12px; }
+      .iguf-select{ flex:1; }
+      .iguf-select label{ display:block; font-size:12px; opacity:.7; margin-bottom:6px; }
+      .iguf-select select{
+        width:100%; padding:8px 10px; border-radius:8px; border:1px solid ${themeDark?'#2b2b2b':'#e0e0e0'};
+        background:${themeDark?'#1a1a1a':'#fff'}; color:inherit;
+      }
+      .iguf-buttons button{
+        padding:9px 12px; border-radius:8px; border:1px solid ${themeDark?'#2b2b2b':'#e0e0e0'}; background:${themeDark?'#1a1a1a':'#fff'};
+        color:inherit; cursor:pointer; font-weight:700; margin-left:6px; min-width:70px;
+      }
+      .iguf-buttons button.primary{
+        background: linear-gradient(135deg,#E1306C,#FD1D1D); color:#fff; border:0;
+      }
+      .iguf-buttons button:disabled{ opacity:.5; cursor:not-allowed; }
+      .iguf-panel{ border:1px solid ${themeDark?'#2b2b2b':'#eaeaea'}; border-radius:12px; overflow:hidden; }
+      .iguf-panel-title{ padding:10px 12px; font-weight:700; background:${themeDark?'#1a1a1a':'#fafafa'}; border-bottom:1px solid ${themeDark?'#2b2b2b':'#eaeaea'}; }
+      .iguf-stats{ display:grid; grid-template-columns: repeat(2,1fr); gap:8px; padding:12px; }
+      .iguf-stat{ background:${themeDark?'#161616':'#fff'}; border:1px solid ${themeDark?'#2b2b2b':'#eaeaea'}; border-radius:10px; padding:10px; }
+      .iguf-stat .label{ font-size:12px; opacity:.7; margin-bottom:4px; }
+      .iguf-stat .value{ font-size:16px; font-weight:800; }
+      .iguf-progress{ display:flex; align-items:center; gap:8px; padding:0 12px 12px; }
+      .iguf-progress .bar{ flex:1; height:10px; border-radius:10px; background:${themeDark?'#1a1a1a':'#f1f1f1'}; overflow:hidden; }
+      .iguf-progress .fill{ height:100%; width:0%; background: linear-gradient(135deg,#E1306C,#FD1D1D,#FCAF45); transition:width .3s; }
+      .iguf-progress .pct{ width:40px; text-align:right; font-weight:700; font-size:12px; }
+      .iguf-support{
+        margin-top:12px; font-size:12px; opacity:.9; text-align:center; border-top:1px solid ${themeDark?'#2b2b2b':'#eaeaea'}; padding-top:10px;
+      }
+      .iguf-support a{ display:block; color:${themeDark?'#ffd1dc':'#E1306C'}; text-decoration:none; margin-top:4px; font-weight:700;}
+      .iguf-min, .iguf-close{ font-weight:900; }
+      .iguf-min:hover, .iguf-close:hover{ transform: translateY(-1px); }
+    `;
+    document.head.appendChild(style);
+    document.body.appendChild(wrap);
+
+    // Dragging
+    (function makeDraggable(){
+      const win = wrap.querySelector('.iguf-window');
+      const header = wrap.querySelector('.iguf-header');
+      let sx, sy, ox, oy, dragging=false;
+      header.addEventListener('mousedown', (e)=>{
+        if (e.target.closest('.iguf-actions')) return;
+        dragging=true; sx=e.clientX; sy=e.clientY;
+        const rect = win.getBoundingClientRect(); ox=rect.left; oy=rect.top;
+        document.addEventListener('mousemove', move); document.addEventListener('mouseup', up);
+      });
+      function move(e){ if(!dragging) return; const dx=e.clientX-sx, dy=e.clientY-sy; win.style.position='fixed'; win.style.left=(ox+dx)+'px'; win.style.top=(oy+dy)+'px'; win.style.right='auto'; }
+      function up(){ dragging=false; document.removeEventListener('mousemove', move); document.removeEventListener('mouseup', up); }
+    })();
+
+    // Actions
+    wrap.querySelector('.iguf-min').onclick = () => {
+      const body = wrap.querySelector('.iguf-body');
+      body.style.display = (body.style.display==='none')?'block':'none';
     };
-    
-    document.getElementById('gui-pause').onclick = () => {
-      stats.isPaused = !stats.isPaused;
-      const pauseBtn = document.getElementById('gui-pause');
-      pauseBtn.textContent = stats.isPaused ? '▶ Wznów' : '⏸ Pauza';
-      console.log(stats.isPaused ? '⏸️ Pauza' : '▶️ Wznowiono');
+    wrap.querySelector('.iguf-close').onclick = () => wrap.remove();
+
+    // Controls
+    const status = wrap.querySelector('#iguf-status');
+    const modeSel = wrap.querySelector('#iguf-mode');
+    const startBtn = wrap.querySelector('#iguf-start');
+    const pauseBtn = wrap.querySelector('#iguf-pause');
+    const stopBtn  = wrap.querySelector('#iguf-stop');
+
+    modeSel.value = CONFIG.mode;
+    modeSel.onchange = () => {
+      CONFIG.mode = modeSel.value;
+      updateStatsGUI();
     };
-    
-    document.getElementById('gui-stop').onclick = () => {
-      stats.isRunning = false;
-      updateGUIButtons(false);
-      console.log('⏹️ Zatrzymano przez użytkownika');
+
+    startBtn.onclick = async () => {
+      if (!isOnFollowingList()) {
+        alert(L.messages.needFollowing);
+        return;
+      }
+      status.textContent = '✅ ' + L.ui.ready;
+      startBtn.disabled = true; pauseBtn.disabled = false; stopBtn.disabled = false;
+      stats.running = true; stats.paused = false; stats.start = Date.now(); stats.lastHourReset = Date.now();
+      await mainLoop();
     };
+    pauseBtn.onclick = () => {
+      stats.paused = !stats.paused;
+      pauseBtn.textContent = stats.paused ? L.ui.resume : L.ui.pause;
+    };
+    stopBtn.onclick = () => {
+      stats.running = false; stats.paused = false;
+      startBtn.disabled = false; pauseBtn.disabled = true; stopBtn.disabled = true;
+    };
+
+    GUI = { wrap, status, startBtn, pauseBtn, stopBtn, modeSel };
+    updateStatusByLocation();
+    updateStatsGUI();
   }
-  
-  function updateGUI() {
-    if (!CONFIG.SHOW_GUI) return;
-    
-    const elapsed = Math.round((Date.now() - stats.sessionStart) / 60000);
-    const rate = elapsed > 0 ? (stats.unfollowed / (elapsed / 60)).toFixed(1) : '0';
-    
-    const unfollowedEl = document.getElementById('gui-unfollowed');
-    const hourlyEl = document.getElementById('gui-hourly');
-    const rateEl = document.getElementById('gui-rate');
-    const timeEl = document.getElementById('gui-time');
-    
-    if (unfollowedEl) unfollowedEl.textContent = stats.unfollowed;
-    if (hourlyEl) hourlyEl.textContent = `${stats.hourlyCount}/${stats.currentHourLimit}`;
+
+  function isOnFollowingList() {
+    if (location.pathname.includes('/following')) return true;
+    // heuristic: multiple "Following" buttons present
+    const btns = Array.from(document.querySelectorAll('button')).map(b=>norm(b.innerText||b.textContent));
+    const count = btns.filter(t=>L.texts.following.some(x=>t===norm(x))).length;
+    return count >= 3;
+  }
+
+  function updateStatusByLocation() {
+    if (!GUI) return;
+    GUI.status.textContent = isOnFollowingList() ? ('✅ ' + L.ui.ready) : L.ui.notFollowingList;
+  }
+
+  function updateStatsGUI() {
+    if (!GUI) return;
+    const limits = currentLimits();
+    const unfEl = GUI.wrap.querySelector('#iguf-unf');
+    const hourEl= GUI.wrap.querySelector('#iguf-hour');
+    const rateEl= GUI.wrap.querySelector('#iguf-rate');
+    const timeEl= GUI.wrap.querySelector('#iguf-time');
+    const bar   = GUI.wrap.querySelector('#iguf-bar');
+    const pct   = GUI.wrap.querySelector('#iguf-pct');
+
+    const minutes = Math.max(0, Math.round((Date.now()-stats.start)/60000));
+    const rate = minutes>0 ? (stats.unfollowed/(minutes/60)).toFixed(1) : '0';
+    const dayPct = Math.min(100, Math.round( (stats.unfollowed / limits.daily) * 100 ));
+
+    if (unfEl) unfEl.textContent = String(stats.unfollowed);
+    if (hourEl) hourEl.textContent = `${stats.hourly}/${limits.hourly}`;
     if (rateEl) rateEl.textContent = `${rate}/h`;
-    if (timeEl) timeEl.textContent = `${elapsed}m`;
-  }
-  
-  function updateGUIButtons(running) {
-    if (!CONFIG.SHOW_GUI) return;
-    
-    const startBtn = document.getElementById('gui-start');
-    const pauseBtn = document.getElementById('gui-pause');
-    const stopBtn = document.getElementById('gui-stop');
-    
-    if (startBtn) startBtn.disabled = running;
-    if (pauseBtn) pauseBtn.disabled = !running;
-    if (stopBtn) stopBtn.disabled = !running;
+    if (timeEl) timeEl.textContent = `${minutes}m`;
+    if (bar) bar.style.width = `${dayPct}%`;
+    if (pct) pct.textContent = `${dayPct}%`;
   }
 
   // ===========================
-  // GŁÓWNA FUNKCJA
+  // MAIN LOOP
   // ===========================
-  
-  async function startUnfollow() {
-    stats.isRunning = true;
-    stats.isPaused = false;
-    stats.sessionStart = Date.now();
-    stats.lastHourReset = Date.now();
-    
-    updateGUIButtons(true);
-    
-    console.log(`🚀 Start @ ${getTime()}`);
-    console.log(`📊 Plan: ${CONFIG.FIRST_HOUR_LIMIT} w 1. godz, potem ${CONFIG.NORMAL_HOUR_LIMIT}/godz`);
-    console.log(`🎯 Cel: ${CONFIG.TOTAL_LIMIT} unfollow\n`);
-    
-    if (CONFIG.DRY_RUN) {
-      console.log('🔍 TRYB TESTOWY - Bez rzeczywistego unfollowingu');
-    }
-    
-    while (stats.unfollowed < CONFIG.TOTAL_LIMIT && stats.isRunning) {
-      // Pauza
-      if (stats.isPaused) {
-        await delay(1000);
-        continue;
-      }
-      
+  async function mainLoop() {
+    console.log(`${L.messages.welcome} · Mode: ${CONFIG.mode} · ${now()}`);
+    console.log('💝 100% FREE · IG: @psteczka · GH: legolasek/Instagram-Bulk-Unfollow-Tool');
+
+    while (stats.running) {
       try {
-        // RESET LICZNIKA GODZINOWEGO
-        if (Date.now() - stats.lastHourReset > 3600000) {
-          stats.hourlyCount = 0;
+        if (stats.paused) { await delay(600); continue; }
+
+        const limits = currentLimits();
+
+        // Hourly reset
+        if (Date.now()-stats.lastHourReset > 3600000) {
+          stats.hourly = 0;
           stats.lastHourReset = Date.now();
-          stats.currentHourLimit = CONFIG.NORMAL_HOUR_LIMIT;
-          console.log(`\n⏰ [${getTime()}] Nowa godzina - limit: ${stats.currentHourLimit}`);
+          if (CONFIG.DEBUG) console.log('⏰ Hour reset', now());
         }
-        
-        // SPRAWDŹ LIMITY
-        if (stats.hourlyCount >= stats.currentHourLimit) {
-          const waitTime = 3600000 - (Date.now() - stats.lastHourReset);
-          const minutes = Math.ceil(waitTime / 60000);
-          console.log(`⏸️ Limit godzinowy osiągnięty. Czekam ${minutes} min...`);
-          
-          // Co 5 minut pokazuj countdown
-          for(let i = minutes; i > 0; i -= 5) {
-            if (!stats.isRunning) return;
-            await delay(Math.min(5, i) * 60000);
-            if(i > 5) console.log(`⏳ Pozostało ${i-5} minut...`);
+
+        // Check limits
+        if (stats.hourly >= limits.hourly) {
+          const wait = 3600000 - (Date.now()-stats.lastHourReset);
+          const mins = Math.ceil(wait/60000);
+          console.log(`${L.messages.hourlyLimitWait} ${mins} min…`);
+          for (let m=mins; m>0 && stats.running; m-=5) {
+            await delay(Math.min(5,m)*60000);
           }
-          
-          stats.hourlyCount = 0;
+          stats.hourly = 0;
           stats.lastHourReset = Date.now();
           continue;
         }
-        
-        if (stats.unfollowed >= CONFIG.DAILY_LIMIT) {
-          console.log(`\n✅ Osiągnięto dzienny limit (${CONFIG.DAILY_LIMIT})!`);
-          console.log("💡 Uruchom skrypt ponownie jutro");
+        if (stats.unfollowed >= limits.daily) {
+          console.log(`✅ ${L.messages.finished}. ${L.messages.progress}: ${stats.unfollowed}/${limits.daily}`);
           break;
         }
-        
-        // LOSOWE ZACHOWANIA
-        await humanBehavior.randomScroll();
-        await humanBehavior.misclick();
-        
-        // ZNAJDŹ PRZYCISK FOLLOWING - LISTA
-        const followingBtn = findButton([
-          "Following", 
-          "Obserwowanie", 
-          "Obserwujesz",
-          "Follow"
-        ]);
-        
-        if (!followingBtn) {
-          console.log("🔍 Szukam przycisków...");
-          window.scrollBy(0, 300);
-          await delay(random(2000, 3000));
+
+        // Behavior
+        await human.scroll();
+        await human.misclick();
+
+        // Find next "Following"
+        let found = findNextFollowing();
+        if (!found) {
+          if (CONFIG.DEBUG) console.log(L.messages.searchButtons);
+          window.scrollBy(0, 340);
           stats.errors++;
-          
-          if(stats.errors > 10) {
-            console.log("⚠️ Zbyt wiele błędów, odświeżam stronę za 30s...");
-            await delay(30000);
-            location.reload();
+          if (stats.errors > 10) {
+            console.log('🔄 Too many misses, small refresh of viewport scroll');
+            stats.errors = 0;
           }
+          await delay(rand(900,1500));
           continue;
         }
-        
         stats.errors = 0;
-        
-        // LOSOWE POMIJANIE (bardziej ludzkie)
-        if (Math.random() < 0.05) { // 5% szans
-          console.log("⏭️ Pomijam to konto");
-          followingBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          await delay(random(500, 1500));
-          window.scrollBy(0, 150);
+
+        const {btn: followingBtn, row} = found;
+
+        // Avoid clicking "Follow" (safety)
+        if (textIncludesAny(followingBtn, L.texts.followState)) {
+          processedRows.add(row); row.dataset.processed='1';
           continue;
         }
-        
-        // INTERAKCJA Z PRZYCISKIEM
-        humanBehavior.mouseMove(followingBtn);
-        await delay(random(200, 500));
-        
-        followingBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        await delay(random(500, 1000));
-        
-        await humanBehavior.hesitate();
-        
+
+        const username = extractUsername(row) || 'Account_'+(stats.unfollowed+1);
+
+        // Scroll into view and click
+        followingBtn.scrollIntoView({ behavior:'smooth', block:'center' });
+        await delay(rand(350,700));
+        await human.hesitate();
         followingBtn.click();
-        await delay(random(800, 1500));
-        
-        // ZNAJDŹ POTWIERDZENIE - LISTA
-        const confirmBtn = findButton([
-          "Unfollow",
-          "Przestań obserwować",
-          "Anuluj obserwowanie",
-          "Usuń"
-        ]);
-        
-        if (confirmBtn) {
-          humanBehavior.mouseMove(confirmBtn);
-          await delay(random(300, 700));
-          
-          await humanBehavior.hesitate();
-          
-          if (!CONFIG.DRY_RUN) {
-            confirmBtn.click();
-            stats.unfollowed++;
-            stats.hourlyCount++;
-            
-            // WYŚWIETL STATUS
-            const elapsed = Math.round((Date.now() - stats.sessionStart) / 60000);
-            const rate = elapsed > 0 ? (stats.unfollowed / (elapsed / 60)).toFixed(1) : '0';
-            console.log(`✅ [${getTime()}] #${stats.unfollowed} | Godz: ${stats.hourlyCount}/${stats.currentHourLimit} | Tempo: ${rate}/h`);
-          } else {
-            // DRY RUN
-            stats.unfollowed++;
-            stats.hourlyCount++;
-            console.log(`🔍 [${getTime()}] TRYB TESTOWY: Odobserwowano by #${stats.unfollowed}`);
-          }
-          
-          updateGUI();
+
+        // Confirm dialog (exact matching preferred)
+        const confirmBtn = await waitFor(()=>findConfirmBtn(), 4000, 80);
+        if (!confirmBtn) {
+          // No dialog found: mark and move on
+          processedRows.add(row); row.dataset.processed='1';
+          window.scrollBy(0, (row.getBoundingClientRect().height||120)+20);
+          await delay(rand(300,700));
+          continue;
         }
-        
-        // PROGRESYWNE OPÓŹNIENIE
-        const [minD, maxD] = getProgressiveDelay();
-        await delay(random(minD, maxD));
-        
-        // PRZERWY
-        if (stats.unfollowed % CONFIG.MINI_BREAK_EVERY === 0 && stats.unfollowed > 0) {
-          const breakTime = random(...CONFIG.MINI_BREAK_TIME);
-          console.log(`☕ Krótka przerwa ${Math.round(breakTime/1000)}s`);
-          await delay(breakTime);
-          await humanBehavior.randomScroll();
+
+        await delay(rand(220,480));
+        confirmBtn.click();
+
+        // Wait row state becomes "Follow"
+        const ok = await waitRowBecameUnfollowed(row, 6000);
+        if (!ok && CONFIG.DEBUG) console.log('⚠️ State did not switch to Follow for', username);
+
+        // Mark processed
+        processedRows.add(row); row.dataset.processed='1';
+        processedUsers.add(username);
+
+        stats.unfollowed++;
+        stats.hourly++;
+
+        const minutes = Math.max(1, Math.round((Date.now()-stats.start)/60000));
+        const rate = (stats.unfollowed/(minutes/60)).toFixed(1);
+        console.log(`✅ [${now()}] ${username} | #${stats.unfollowed} | Hour: ${stats.hourly}/${limits.hourly} | Rate: ${rate}/h`);
+        updateStatsGUI();
+
+        // Scroll one row down
+        const h = row.getBoundingClientRect().height || 120;
+        window.scrollBy({ top: h+22, behavior:'smooth' });
+        await delay(rand(260,620));
+
+        // Progressive delay
+        const [minD,maxD] = progressiveDelayBase();
+        await delay(rand(minD,maxD));
+
+        // Breaks
+        if (stats.unfollowed>0 && stats.unfollowed % CONFIG.MINI_BREAK_EVERY === 0) {
+          const t = rand(...CONFIG.MINI_BREAK_TIME);
+          console.log(`${L.messages.shortBreak} ${Math.round(t/1000)}s`);
+          await delay(t);
         }
-        
-        if (stats.unfollowed % CONFIG.LONG_BREAK_EVERY === 0 && stats.unfollowed > 0) {
-          const breakTime = random(...CONFIG.LONG_BREAK_TIME);
-          console.log(`🍔 Długa przerwa ${Math.round(breakTime/60000)} min`);
-          console.log(`📈 Postęp: ${stats.unfollowed}/${CONFIG.TOTAL_LIMIT} (${(stats.unfollowed/CONFIG.TOTAL_LIMIT*100).toFixed(1)}%)`);
-          await delay(breakTime);
-          
-          // Czasem odśwież stronę podczas długiej przerwy
-          if(Math.random() < 0.3) {
-            console.log("🔄 Odświeżam stronę...");
-            location.reload();
-            await delay(10000);
-          }
+        if (stats.unfollowed>0 && stats.unfollowed % CONFIG.LONG_BREAK_EVERY === 0) {
+          const t = rand(...CONFIG.LONG_BREAK_TIME);
+          console.log(`${L.messages.longBreak} ${Math.round(t/60000)}m · ${L.messages.progress}: ${stats.unfollowed}/${limits.daily}`);
+          await delay(t);
         }
-        
-      } catch (error) {
-        console.error("❌ Błąd:", error);
+
+      } catch (e) {
+        console.error('❌ Error:', e);
         stats.errors++;
-        await delay(random(3000, 5000));
+        await delay(rand(1200,2200));
       }
     }
-    
-    // PODSUMOWANIE
-    stats.isRunning = false;
-    updateGUIButtons(false);
-    
-    const totalMinutes = Math.round((Date.now() - stats.sessionStart) / 60000);
-    console.log("\n🏁 === ZAKOŃCZONO ===");
-    console.log(`✅ Odobserwowano: ${stats.unfollowed} kont`);
-    console.log(`⏱️ Czas: ${Math.floor(totalMinutes/60)}h ${totalMinutes%60}min`);
-    console.log(`📊 Średnie tempo: ${(stats.unfollowed/(totalMinutes/60)).toFixed(1)}/h`);
-    
-    // Show support message
-    console.log(`
-    💝 Dzięki za użycie Instagram Unfollow Tool v0.1.3!
-    
-    Jeśli pomogło Ci:
-    📸 Zaobserwuj @psteczka: https://www.instagram.com/psteczka
-    ⭐ Daj gwiazdkę: https://github.com/legolasek/Instagram-Bulk-Unfollow-Tool
-    `);
+
+    // Finish
+    const totalMinutes = Math.max(1, Math.round((Date.now()-stats.start)/60000));
+    console.log(`\n${L.messages.finished}`);
+    console.log(`✅ ${L.ui.unfollowed}: ${stats.unfollowed}`);
+    console.log(`⏱️ ${L.ui.time}: ${Math.floor(totalMinutes/60)}h ${totalMinutes%60}m`);
+    console.log(`📊 ${L.ui.rate}: ${(stats.unfollowed/(totalMinutes/60)).toFixed(1)}/h`);
+    console.log('💝 This tool is 100% FREE. If it helped you:');
+    console.log('   📸 Follow: https://www.instagram.com/psteczka');
+    console.log('   ⭐ Star:  https://github.com/legolasek/Instagram-Bulk-Unfollow-Tool');
+
+    if (GUI) {
+      GUI.startBtn.disabled = false;
+      GUI.pauseBtn.disabled = true;
+      GUI.stopBtn.disabled  = true;
+    }
   }
 
   // ===========================
-  // INICJALIZACJA
+  // INIT
   // ===========================
-  
-  if (!window.location.hostname.includes('instagram.com')) {
-    alert('⚠️ Ten skrypt działa tylko na Instagram.com');
-    return;
+  if (CONFIG.SHOW_GUI) buildGUI();
+  else {
+    // No GUI: run if already on following list
+    if (!isOnFollowingList()) {
+      alert(L.messages.needFollowing);
+      return;
+    }
+    stats.running = true;
+    await mainLoop();
   }
-  
-  // Check if on following list
-  const isOnFollowing = window.location.pathname.includes('/following') || 
-                       document.querySelectorAll('button').length > 10;
-  
-  if (!isOnFollowing) {
-    alert('⚠️ Przejdź najpierw do listy obserwowanych!\n\n1. Kliknij swój profil\n2. Kliknij "Obserwujesz"\n3. Uruchom skrypt ponownie');
-    return;
-  }
-  
-  console.log('✅ Gotowe! Jesteś na liście obserwowanych.');
-  
-  // Create GUI
-  createGUI();
-  
-  // Auto-start if GUI disabled
-  if (!CONFIG.SHOW_GUI) {
-    setTimeout(startUnfollow, 2000);
-  }
-  
-  // Global access
-  window.unfollowTool = { stats, CONFIG, startUnfollow };
-  
+
+  // Expose for console tweaks
+  window.igUnfollowTool = { VERSION, CONFIG, stats, LANG: L };
+  // Keep status updated if user opens following later
+  setInterval(updateStatusByLocation, 1500);
 })();
