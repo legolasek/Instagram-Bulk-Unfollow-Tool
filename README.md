@@ -1,3 +1,5 @@
+---
+
 # Instagram Bulk Unfollow Tool 🚀
 
 [![Version](https://img.shields.io/badge/version-1.2-blue.svg)](https://github.com/legolasek/Instagram-Bulk-Unfollow-Tool/releases)
@@ -6,7 +8,7 @@
 [![Languages](https://img.shields.io/badge/languages-8-success.svg)](#languages)
 [![GUI](https://img.shields.io/badge/GUI-Instagram%20styled-ff69b4.svg)](#features)
 
-Professional, Instagram‑styled GUI tool to safely bulk unfollow, built for cleanup after account compromise or follow-spam.
+Instagram‑styled GUI tool to safely bulk unfollow. Built for cleanup after account compromise or follow‑spam. Loop‑safe, multilingual, single‑file script you paste into the console.
 
 This tool is 100% FREE. If it saves you time:
 - 📸 Follow on Instagram: @psteczka → https://www.instagram.com/psteczka
@@ -14,208 +16,319 @@ This tool is 100% FREE. If it saves you time:
 
 ---
 
-## What’s new in v1.2
-
-- ✅ Loop‑safe unfollowing (no more unfollow/follow on the same account)
-- ✅ Beautiful GUI styled like Instagram (dark/light auto)
-- ✅ Multilingual UI (auto-detect): EN, ES, FR, DE, PT, PL, RU, IT
-- ✅ Modes with smart limits: Safe / Normal / Fast
-- ✅ Progressive delays, random behavior and breaks to reduce blocks
-- ✅ No page reloads, no API, no installs — single-file paste in console
-
----
-
-## Important
-
-You must manually open your Following list before starting:
-- Profile → “Following” → wait until the list loads
-- Then run the script (see Quick Start below)
-
-The tool does NOT navigate or reload pages (to keep the script alive).
+## Languages | Idiomas | Langues | Sprachen | Idiomas | Języki | Языки | Lingue
+- [English](#english)
+- [Polski](#polski)
+- [Español](#español)
+- [Français](#français)
+- [Deutsch](#deutsch)
+- [Português](#português)
+- [Русский](#русский)
+- [Italiano](#italiano)
 
 ---
 
-## Quick Start (30 seconds)
+## English
 
-Method A — Browser console (recommended):
-1) Go to Instagram → your profile → click “Following”
-2) Open DevTools Console:
-   - Windows/Linux: F12 or Ctrl+Shift+I
-   - macOS: Cmd+Option+I
-3) Copy & paste the entire script from instagram-unfollow-tool.js
-4) Press Enter, choose mode, click Start
+### Overview
+- Instagram‑styled GUI, works entirely in your browser (no API, no installs).
+- Loop‑safe: never re‑follows the same account.
+- Multilingual UI (auto‑detect): EN, ES, FR, DE, PT, PL, RU, IT.
+- 100% FREE. Please consider a follow/star if it helps you.
 
-Method B — Bookmarklet (one‑click):
-- Create a bookmark with this URL:
-```
-javascript:(function(){fetch('https://raw.githubusercontent.com/legolasek/Instagram-Bulk-Unfollow-Tool/main/instagram-unfollow-tool.js').then(r=>r.text()).then(eval)})();
-```
-- Open Instagram → your profile → “Following” → click the bookmark
+### Quick Start
+1) Open your profile → click “Following” → wait for the list to load.  
+2) Press F12 (Console), paste the full script from instagram‑unfollow‑tool.js, press Enter.  
+3) Choose a mode (Safe/Normal/Fast) → Start.
 
-Mobile: Use Chrome/Firefox in Desktop Mode. Console support varies between devices.
+Tip: Console scripts die on page reload. Keep the tab open.
 
----
+### Features
+- 🎛️ GUI (Start/Pause/Stop), live stats, progress bar.
+- 🔄 Loop‑safe algorithm: click “Following” → confirm in dialog → wait row becomes “Follow” → mark processed → scroll.
+- 🧠 Human‑like pacing: randomized delays, hesitation/misclicks, gentle scroll.
+- 🛡️ Smart limits per mode + progressive slowdown (+400 ms per 100 unfollows).
+- 📈 Stats: unfollowed count, hourly usage, rate/h, elapsed time, daily progress.
 
-## Features
-
-- 🎛️ Instagram‑styled GUI (Start/Pause/Stop, live stats, progress bar)
-- 🌍 Multilingual UI (auto-detect: EN, ES, FR, DE, PT, PL, RU, IT)
-- 🔄 Loop‑safe algorithm:
-  - Click only “Following” state
-  - Confirm Unfollow strictly in dialog
-  - Wait for row to change to “Follow”
-  - Mark row processed; scroll to next
-- 🧠 Human-like behavior: random delays, hesitation/misclicks, natural scroll
-- 🛡️ Smart rate limits per mode + progressive slowdown
-- 📈 Live statistics: unfollowed, hourly, rate, elapsed time, daily progress
-- 🧱 No API, no login sharing, no installs — runs entirely in your browser
-
----
-
-## Modes & Limits
-
+### Modes & Limits
 | Mode   | Hourly | Daily | Base delay (ms) |
 |--------|--------|-------|-----------------|
 | Safe   | 30/h   | 200   | 2800–5200       |
 | Normal | 50/h   | 350   | 1800–3600       |
 | Fast   | 70/h   | 450   | 1200–2400       |
 
-Extras:
-- Progressive slowdown: +400 ms every 100 unfollows
-- Breaks: short every 10, long every 50 unfollows (randomized)
+Breaks: short every 10, long every 50 (randomized). Progressive slowdown prevents spikes.
 
-Tip: Start with Safe/Normal, then tune if your account tolerates more.
+### Safety Guidelines
+- Start with 10–20 to test; prefer Safe/Normal if you had recent blocks.
+- Mix with normal activity; avoid marathon sessions.
+- Stop immediately if you see “Action Blocked” and wait 24–48h.
 
----
+### Troubleshooting
+- “Nothing happens”: Ensure you’re on the “Following” list, let it fully load.
+- “Searching for accounts…” repeatedly: switch Instagram language or scroll a bit; then Start.
+- Mobile: use Desktop Mode; console support varies by browser.
+- Still stuck? Open an Issue with your browser/OS/IG language and console logs.
 
-## How it works (high level)
+### FAQ
+- Auto‑navigate? No, to keep the script alive (console scripts stop on navigation).  
+- Can it run after reload? No. Keep the page open.  
+- Will I get banned? No guarantees. The tool minimizes risk (limits/delays), but you’re responsible for usage.  
 
-1) Requires you to open the Following list manually  
-2) Finds “Following” buttons (never clicks “Follow”)  
-3) Clicks “Following”, waits for confirmation dialog, clicks “Unfollow”  
-4) Waits until the same row changes to “Follow” state  
-5) Marks row as processed and scrolls to the next one  
-6) Applies pacing rules (delays, breaks, hourly/daily limits)
-
-This prevents the classic “unfollow → follow again” loop.
-
----
-
-## Safety & Best Practices
-
-- Start small: test with 10–20 unfollows
-- Prefer Safe/Normal mode if you’ve been blocked recently
-- Mix with normal activity, avoid 24/7 automation
-- Stop immediately if you see “Action Blocked”, wait 24–48h
-- Use different times of day; take rest days
-- Respect hourly/daily limits shown in the GUI
+### Support & License
+- 100% FREE. If it helps:  
+  → 📸 Follow @psteczka · ⭐ Star the repo  
+- License: MIT (free to use/modify/share)
 
 ---
 
-## Troubleshooting
+## Polski
 
-- Script does nothing:
-  - Make sure you’re on your profile’s “Following” view (list open)
-  - Wait a few seconds until the list fully loads
-  - Scroll a bit and press Start again
-- It keeps “Searching for accounts…”:
-  - Switch language in Instagram settings or set CONFIG.LANGUAGE inside the script
-  - Make sure you’re not on a different page (e.g., “Followers”)
-- Action blocked:
-  - Switch to Safe, take longer breaks, try the next day
-- Mobile issues:
-  - Use Desktop Mode; some mobile browsers hide console features
+### Opis
+- GUI w stylu Instagrama, działa w przeglądarce (bez API, bez instalacji).
+- Bez pętli: nie odobserwuje/zaobserwowuje tego samego konta w kółko.
+- Wielojęzyczny interfejs (auto‑wykrywanie).
+- 100% DARMOWE – jeśli pomogło, rozważ obserwację i gwiazdkę.
 
-If something still doesn’t work, open an Issue with details (IG language, browser/OS, console logs).
+### Szybki start
+1) Profil → “Obserwujesz” → zaczekaj aż lista się załaduje.  
+2) F12 (Konsola), wklej cały skrypt z instagram‑unfollow‑tool.js, Enter.  
+3) Wybierz tryb (Safe/Normal/Fast) → Start.
+
+Uwaga: przeładowanie strony kończy działanie skryptu – trzymaj kartę otwartą.
+
+### Funkcje
+- 🎛️ GUI (Start/Pauza/Stop), statystyki na żywo, pasek postępu.
+- 🔄 Algorytm bez pętli: klik “Obserwowanie/Following” → potwierdzenie w oknie → czekanie aż wiersz zmieni się na “Obserwuj/Follow” → oznaczenie → przewinięcie.
+- 🧠 Naturalne tempo: opóźnienia, wahanie, scroll.
+- 🛡️ Limity per tryb + progresywne spowalnianie (+400 ms co 100 unfollow).
+- 📈 Statystyki: licznik, godzinowy, tempo/h, czas, progres dzienny.
+
+### Tryby i limity
+| Tryb   | Godzinowo | Dziennie | Bazowy delay (ms) |
+|--------|-----------|----------|-------------------|
+| Safe   | 30/h      | 200      | 2800–5200         |
+| Normal | 50/h      | 350      | 1800–3600         |
+| Fast   | 70/h      | 450      | 1200–2400         |
+
+Przerwy: krótka co 10, długa co 50 (losowe). Progresywne spowalnianie zmniejsza ryzyko blokad.
+
+### Bezpieczeństwo
+- Zacznij od 10–20 testowo; jeśli były blokady – tryb Safe/Normal.
+- Mieszaj z normalną aktywnością; unikaj maratonów.
+- “Action Blocked” → natychmiast przerwij, odczekaj 24–48h.
+
+### Rozwiązywanie problemów
+- “Nic się nie dzieje”: upewnij się, że masz otwartą listę “Obserwujesz”.
+- “Szukam kont…” w kółko: zmień język Instagrama albo przewiń i naciśnij Start.
+- Mobile: tryb Desktop; konsola zależy od przeglądarki.
+- Dalej nie działa? Zgłoś Issue z informacją o przeglądarce/OS/języku IG i logami z konsoli.
+
+### FAQ
+- Auto‑nawigacja? Nie – skrypt by przestał działać po przejściu strony.  
+- Po odświeżeniu działa dalej? Nie. Trzymaj stronę otwartą.  
+- Ban? Nie da się zagwarantować. Skrypt minimalizuje ryzyko, ale używasz na własną odpowiedzialność.  
+
+### Wsparcie i licencja
+- 100% DARMOWE. Jeśli pomogło:  
+  → 📸 Obserwuj @psteczka · ⭐ Daj gwiazdkę repo  
+- Licencja: MIT
 
 ---
 
-## Security & Privacy
+## Español
 
-- No passwords, no external servers, nothing installed
-- Executes only in your browser, against the visible page (DOM)
-- Open source, auditable, and 100% FREE
+### Descripción
+GUI al estilo Instagram, funciona en el navegador (sin API/instalaciones), a prueba de bucles y multilingüe. 100% GRATIS.
+
+### Inicio rápido
+1) Perfil → “Siguiendo” → espera a que cargue.  
+2) F12 (Consola), pega el script completo, Enter.  
+3) Elige modo → Iniciar.
+
+### Funciones
+- GUI con estadísticas en vivo, barra de progreso
+- Algoritmo sin bucles
+- Comportamiento humano
+- Límites inteligentes por modo + desaceleración progresiva
+- Estadísticas: dejados de seguir, por hora, velocidad, tiempo, progreso diario
+
+### Modos y límites
+| Modo   | Por hora | Diario | Delay base (ms) |
+|--------|----------|--------|-----------------|
+| Safe   | 30/h     | 200    | 2800–5200       |
+| Normal | 50/h     | 350    | 1800–3600       |
+| Fast   | 70/h     | 450    | 1200–2400       |
+
+Seguridad: empieza con 10–20; si hay bloqueos, usa Safe/Normal. Detente si ves “Action Blocked”.
+
+Soporte: 100% GRATIS → 📸 @psteczka · ⭐ Estrella el repo.  
+Licencia: MIT
 
 ---
 
-## FAQ
+## Français
 
-- Will I get banned?  
-  No one can guarantee it. We minimize risk with limits, delays and human-like behavior. Always respect limits and stop if Instagram warns you.
+### Présentation
+Interface type Instagram, 100% navigateur (sans API/installation), anti‑boucle, multilingue. 100% GRATUIT.
 
-- Can it run in the background or after page reload?  
-  No. Console scripts die on navigation/reload by design. Keep the page open.
+### Démarrage rapide
+1) Profil → “Abonnements” → attendre le chargement.  
+2) F12 (Console), collez le script, Entrée.  
+3) Choisissez un mode → Démarrer.
 
-- Does it auto-navigate to Following?  
-  No — to keep the script alive. Please open “Following” manually.
+### Fonctionnalités
+- GUI avec stats en direct et barre de progression
+- Algorithme anti‑boucle
+- Comportement humain
+- Limites intelligentes + ralentissement progressif
+- Stats: désabonnés, par heure, vitesse, temps, progression
 
-- Can I customize behavior?  
-  Yes. Inside the script you can adjust mode, delays, randomization and breaks.
+### Modes & limites
+| Mode   | Par heure | Jour | Délai de base (ms) |
+|--------|-----------|------|--------------------|
+| Safe   | 30/h      | 200  | 2800–5200          |
+| Normal | 50/h      | 350  | 1800–3600          |
+| Fast   | 70/h      | 450  | 1200–2400          |
+
+Sécurité: commencez petit; stop si “Action Blocked”.  
+Support: 100% GRATUIT → 📸 @psteczka · ⭐ Repo GitHub.  
+Licence: MIT
 
 ---
 
-## Languages
+## Deutsch
 
-This README is primarily in English. Quick‑start in multiple languages:
+### Übersicht
+Instagram‑ähnliches GUI, im Browser (ohne API/Install), loop‑sicher, mehrsprachig. 100% KOSTENLOS.
 
-- English  
-  Open your “Following” list → F12 → paste script → Enter → Start.  
-  100% FREE. If it helps: follow @psteczka and star the repo.
+### Schnellstart
+1) Profil → „Abonniert“ → warten bis geladen.  
+2) F12 (Konsole), Script einfügen, Enter.  
+3) Modus wählen → Starten.
 
-- Español  
-  Abre tu lista de “Siguiendo” → F12 → pega el script → Enter → Iniciar.  
-  100% GRATIS. Si te ayuda: sigue a @psteczka y da estrella al repo.
+### Funktionen
+- GUI mit Live‑Statistiken, Fortschrittsbalken
+- Loop‑sicherer Algorithmus
+- Menschliches Verhalten
+- Intelligente Limits + progressive Verlangsamung
+- Stats: entfolgt, stündlich, Rate, Zeit, Tagesfortschritt
 
-- Français  
-  Ouvrez “Abonnements” → F12 → collez le script → Entrée → Démarrer.  
-  100% GRATUIT. Si cela aide : suivez @psteczka et mettez une étoile.
+### Modi & Limits
+| Modus  | Stündlich | Täglich | Basis‑Delay (ms) |
+|--------|-----------|---------|------------------|
+| Safe   | 30/h      | 200     | 2800–5200        |
+| Normal | 50/h      | 350     | 1800–3600        |
+| Fast   | 70/h      | 450     | 1200–2400        |
 
-- Deutsch  
-  “Abonniert”-Liste öffnen → F12 → Skript einfügen → Enter → Starten.  
-  100% KOSTENLOS. Wenn es hilft: folge @psteczka und gib einen Stern.
+Sicherheit: klein anfangen; bei “Action Blocked” stoppen.  
+Support: 100% KOSTENLOS → 📸 @psteczka · ⭐ Stern.  
+Lizenz: MIT
 
-- Português  
-  Abra “Seguindo” → F12 → cole o script → Enter → Iniciar.  
-  100% GRÁTIS. Se ajudar: siga @psteczka e dê estrela no repositório.
+---
 
-- Polski  
-  Otwórz “Obserwujesz” → F12 → wklej skrypt → Enter → Start.  
-  100% DARMOWE. Jeśli pomaga: zaobserwuj @psteczka i daj gwiazdkę repo.
+## Português
 
-- Русский  
-  Откройте “Подписки” → F12 → вставьте скрипт → Enter → Старт.  
-  100% БЕСПЛАТНО. Если помогло: подпишитесь на @psteczka и поставьте звезду.
+### Visão geral
+GUI estilo Instagram, no navegador (sem API/instalação), sem loops, multilíngue. 100% GRÁTIS.
 
-- Italiano  
-  Apri “Seguiti” → F12 → incolla lo script → Invio → Inizia.  
-  100% GRATIS. Se aiuta: segui @psteczka e lascia una stella al repo.
+### Início rápido
+1) Perfil → “Seguindo” → aguarde carregar.  
+2) F12 (Console), cole o script, Enter.  
+3) Escolha o modo → Iniciar.
+
+### Recursos
+- GUI com estatísticas ao vivo, barra de progresso
+- Algoritmo anti‑loop
+- Comportamento humano
+- Limites por modo + desaceleração progressiva
+- Stats: deixados, por hora, taxa, tempo, progresso diário
+
+### Modos & Limites
+| Modo   | Por hora | Diário | Delay base (ms) |
+|--------|----------|--------|-----------------|
+| Safe   | 30/h     | 200    | 2800–5200       |
+| Normal | 50/h     | 350    | 1800–3600       |
+| Fast   | 70/h     | 450    | 1200–2400       |
+
+Segurança: comece com pouco; pare se “Action Blocked”.  
+Suporte: 100% GRÁTIS → 📸 @psteczka · ⭐ Estrela.  
+Licença: MIT
+
+---
+
+## Русский
+
+### Обзор
+GUI в стиле Instagram, работает в браузере (без API/установки), без зацикливания, многоязычно. 100% БЕСПЛАТНО.
+
+### Быстрый старт
+1) Профиль → «Подписки» → дождитесь загрузки.  
+2) F12 (Консоль), вставьте скрипт, Enter.  
+3) Выберите режим → Старт.
+
+### Возможности
+- GUI с лайв‑статистикой, прогресс‑бар
+- Алгоритм без повторной подписки
+- Человеческое поведение
+- Умные лимиты + прогрессивное замедление
+- Статы: отписки, в час, скорость, время, дневной прогресс
+
+### Режимы и лимиты
+| Режим  | В час | В день | Базовая задержка (мс) |
+|--------|------:|-------:|------------------------|
+| Safe   | 30/ч  | 200    | 2800–5200              |
+| Normal | 50/ч  | 350    | 1800–3600              |
+| Fast   | 70/ч  | 450    | 1200–2400              |
+
+Безопасность: начните с малого; при “Action Blocked” — остановка 24–48 ч.  
+Поддержка: 100% БЕСПЛАТНО → 📸 @psteczka · ⭐ Звезда.  
+Лицензия: MIT
+
+---
+
+## Italiano
+
+### Panoramica
+GUI in stile Instagram, nel browser (senza API/installazioni), sicuro contro i loop, multilingua. 100% GRATUITO.
+
+### Avvio rapido
+1) Profilo → “Seguiti” → attendi il caricamento.  
+2) F12 (Console), incolla lo script, Invio.  
+3) Scegli modalità → Inizia.
+
+### Funzioni
+- GUI con statistiche live, barra progresso
+- Algoritmo senza loop
+- Comportamento umano
+- Limiti per modalità + rallentamento progressivo
+- Stat: non segui più, orario, velocità, tempo, progresso giornaliero
+
+### Modalità & Limiti
+| Modalità | Orario | Giorno | Delay base (ms) |
+|----------|--------|--------|-----------------|
+| Safe     | 30/h   | 200    | 2800–5200       |
+| Normal   | 50/h   | 350    | 1800–3600       |
+| Fast     | 70/h   | 450    | 1200–2400       |
+
+Sicurezza: inizia con poco; stop se “Action Blocked”.  
+Supporto: 100% GRATUITO → 📸 @psteczka · ⭐ Stella.  
+Licenza: MIT
 
 ---
 
 ## Contributing
-
-PRs welcome! Ideas:
-- More languages
-- Accessibility and UX improvements
-- New safe strategies and heuristics
-
-Please open an Issue/Discussion before large changes.
-
----
+PRs welcome (new languages, UX/accessibility, safety heuristics). Open an Issue/Discussion before large changes.
 
 ## License
-
-MIT — free to use, modify and share. This tool is and will remain 100% FREE.
-
----
+MIT — this tool is and will remain 100% FREE.
 
 ## Star History
-
 [![Star History Chart](https://api.star-history.com/svg?repos=legolasek/Instagram-Bulk-Unfollow-Tool&type=Date)](https://star-history.com/#legolasek/Instagram-Bulk-Unfollow-Tool&Date)
 
 ---
 
 Made with ❤️ for the Instagram community  
 If this saved you hours, please:
-- 📸 Follow @psteczka on Instagram
-- ⭐ Give this repo a star so others can find it too
+- 📸 Follow @psteczka
+- ⭐ Star this repository so others can find it too
