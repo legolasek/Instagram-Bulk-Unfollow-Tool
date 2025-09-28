@@ -1,5 +1,3 @@
----
-
 # Instagram Bulk Unfollow Tool 🚀
 
 [![Version](https://img.shields.io/badge/version-1.2-blue.svg)](https://github.com/legolasek/Instagram-Bulk-Unfollow-Tool/releases)
