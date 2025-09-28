@@ -28,7 +28,7 @@
       SAFE:   { hourly: 30, daily: 200, delay: [2800, 5200] },
       NORMAL: { hourly: 50, daily: 350, delay: [1800, 3600] },
       FAST:   { hourly: 70, daily: 450, delay: [1200, 2400] },
-      RAPID:  { hourly: 9999, daily: 9999, delay: [600, 1200] },
+      RAPID:  { hourly: 9999, daily: 9999, delay: [250, 500] },
     },
     mode: 'NORMAL',
     // Delays progression
@@ -659,6 +659,17 @@
     const scanFollowersBtn = wrap.querySelector('#iguf-scan-followers');
     const scanStatus = wrap.querySelector('#iguf-scan-status');
 
+    // --- Non-follower logic ---
+    function updateNonFollowerMode() {
+        CONFIG.unfollowNonFollowers = nonFollowerToggle.checked;
+        if (CONFIG.unfollowNonFollowers && !CONFIG.followersScanned) {
+            startBtn.disabled = true;
+            scanStatus.textContent = `🚨 ${L.ui.scanFollowersPrompt}`;
+        } else {
+            startBtn.disabled = false;
+        }
+    }
+
     // --- Whitelist logic ---
     function loadWhitelist() {
       try {
@@ -682,16 +693,6 @@
     whitelistArea.oninput = saveWhitelist;
     loadWhitelist();
 
-    // --- Non-follower logic ---
-    function updateNonFollowerMode() {
-        CONFIG.unfollowNonFollowers = nonFollowerToggle.checked;
-        if (CONFIG.unfollowNonFollowers && !CONFIG.followersScanned) {
-            startBtn.disabled = true;
-            scanStatus.textContent = `🚨 ${L.ui.scanFollowersPrompt}`;
-        } else {
-            startBtn.disabled = false;
-        }
-    }
     nonFollowerToggle.onchange = updateNonFollowerMode;
 
     function loadFollowers() {
@@ -912,8 +913,10 @@
         }
 
         // Behavior
-        await human.scroll();
-        await human.misclick();
+        if (CONFIG.mode !== 'RAPID') {
+            await human.scroll();
+            await human.misclick();
+        }
 
         // Find next "Following"
         let found = findNextFollowing();
@@ -1038,15 +1041,17 @@
         await delay(rand(minD,maxD));
 
         // Breaks
-        if (stats.unfollowed>0 && stats.unfollowed % CONFIG.MINI_BREAK_EVERY === 0) {
-          const t = rand(...CONFIG.MINI_BREAK_TIME);
-          console.log(`${L.messages.shortBreak} ${Math.round(t/1000)}s`);
-          await delay(t);
-        }
-        if (stats.unfollowed>0 && stats.unfollowed % CONFIG.LONG_BREAK_EVERY === 0) {
-          const t = rand(...CONFIG.LONG_BREAK_TIME);
-          console.log(`${L.messages.longBreak} ${Math.round(t/60000)}m · ${L.messages.progress}: ${stats.unfollowed}/${limits.daily}`);
-          await delay(t);
+        if (CONFIG.mode !== 'RAPID') {
+            if (stats.unfollowed>0 && stats.unfollowed % CONFIG.MINI_BREAK_EVERY === 0) {
+              const t = rand(...CONFIG.MINI_BREAK_TIME);
+              console.log(`${L.messages.shortBreak} ${Math.round(t/1000)}s`);
+              await delay(t);
+            }
+            if (stats.unfollowed>0 && stats.unfollowed % CONFIG.LONG_BREAK_EVERY === 0) {
+              const t = rand(...CONFIG.LONG_BREAK_TIME);
+              console.log(`${L.messages.longBreak} ${Math.round(t/60000)}m · ${L.messages.progress}: ${stats.unfollowed}/${limits.daily}`);
+              await delay(t);
+            }
         }
 
       } catch (e) {
