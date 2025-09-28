@@ -1,334 +1,221 @@
 # Instagram Bulk Unfollow Tool 🚀
 
-[![Version](https://img.shields.io/badge/version-0.1.2-blue.svg)](https://github.com/legolasek/Instagram-Bulk-Unfollow-Tool/releases)
+[![Version](https://img.shields.io/badge/version-1.2-blue.svg)](https://github.com/legolasek/Instagram-Bulk-Unfollow-Tool/releases)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-[![Free](https://img.shields.io/badge/price-FREE-brightgreen.svg)](https://github.com/legolasek/Instagram-Bulk-Unfollow-Tool)
+[![Free](https://img.shields.io/badge/price-100%25%20FREE-brightgreen.svg)](https://github.com/legolasek/Instagram-Bulk-Unfollow-Tool)
 [![Languages](https://img.shields.io/badge/languages-8-success.svg)](#languages)
+[![GUI](https://img.shields.io/badge/GUI-Instagram%20styled-ff69b4.svg)](#features)
 
-> **🎯 100% FREE Tool - No payment required!**  
-> Professional Instagram unfollow tool with GUI for account cleanup.
+Professional, Instagram‑styled GUI tool to safely bulk unfollow, built for cleanup after account compromise or follow-spam.
 
-**💝 If this saves you time, I'd be grateful for:**
-- 📸 **Follow on Instagram**: [@psteczka](https://www.instagram.com/psteczka)
-- ⭐ **Star on GitHub**: [Give this repo a star](https://github.com/legolasek/Instagram-Bulk-Unfollow-Tool)
-
----
-
-## 🌍 Languages | Idiomas | Langues | Sprachen
-
-**[English](#english)** | **[Español](#español)** | **[Français](#français)** | **[Deutsch](#deutsch)** | **[Português](#português)** | **[Polski](#polski)** | **[Русский](#русский)** | **[Italiano](#italiano)**
+This tool is 100% FREE. If it saves you time:
+- 📸 Follow on Instagram: @psteczka → https://www.instagram.com/psteczka
+- ⭐ Star this repo: https://github.com/legolasek/Instagram-Bulk-Unfollow-Tool
 
 ---
 
-## English
+## What’s new in v1.2
 
-### 🚀 Quick Start
-
-**Step 1: Navigate to Following List**
-1. Click your **profile picture** (top right)
-2. Click **"Following"** on your profile  
-3. Wait for the list to load
-
-**Step 2: Run the Tool**
-1. Press **`F12`** to open Developer Console
-2. **Copy & paste** the entire script from [`instagram-unfollow-tool.js`](instagram-unfollow-tool.js)
-3. Press **Enter** and use the GUI!
-
-### ✨ Features
-
-- 🎛️ **Professional GUI** with real-time statistics
-- 🛡️ **Safe rate limits** (60/hour first hour, 40/hour after)
-- 🌍 **8 languages** auto-detection
-- 💾 **Automatic backup** of your following list
-- 🤖 **Human-like behavior** simulation
-- 🔍 **Dry run mode** for testing
-- 📊 **Live statistics** and progress tracking
-
-### 🛡️ Safety Guidelines
-
-- ✅ **Start with 10-20** unfollows to test
-- ✅ **Use default settings** for safety
-- ✅ **Take breaks** between sessions
-- ⚠️ **Stop immediately** if you see "Action Blocked"
-
-### 💝 Support the Developer
-
-This tool is **100% FREE** and always will be! If it helps you:
-- 📸 **Follow me**: [@psteczka](https://www.instagram.com/psteczka) on Instagram
-- ⭐ **Star this repo** on GitHub (it really helps!)
-- 🐛 **Report issues** to help improve the tool
+- ✅ Loop‑safe unfollowing (no more unfollow/follow on the same account)
+- ✅ Beautiful GUI styled like Instagram (dark/light auto)
+- ✅ Multilingual UI (auto-detect): EN, ES, FR, DE, PT, PL, RU, IT
+- ✅ Modes with smart limits: Safe / Normal / Fast
+- ✅ Progressive delays, random behavior and breaks to reduce blocks
+- ✅ No page reloads, no API, no installs — single-file paste in console
 
 ---
 
-## Español
+## Important
 
-### 🚀 Inicio Rápido
+You must manually open your Following list before starting:
+- Profile → “Following” → wait until the list loads
+- Then run the script (see Quick Start below)
 
-**Paso 1: Navegar a Lista de Siguiendo**
-1. Haz clic en tu **foto de perfil** (arriba a la derecha)
-2. Haz clic en **"Siguiendo"** en tu perfil
-3. Espera a que cargue la lista
-
-**Paso 2: Ejecutar la Herramienta**
-1. Presiona **`F12`** para abrir la Consola de Desarrollador
-2. **Copia y pega** todo el script de [`instagram-unfollow-tool.js`](instagram-unfollow-tool.js)
-3. Presiona **Enter** y usa la interfaz!
-
-### ✨ Características
-
-- 🎛️ **Interfaz profesional** con estadísticas en tiempo real
-- 🛡️ **Límites seguros** (60/hora primera hora, 40/hora después)
-- 🌍 **8 idiomas** detección automática
-- 💾 **Respaldo automático** de tu lista de seguidos
-- 🤖 **Comportamiento humano** simulado
-- 🔍 **Modo prueba** para testear
-- 📊 **Estadísticas en vivo** y seguimiento de progreso
-
-### 💝 Apoya al Desarrollador
-
-¡Esta herramienta es **100% GRATUITA** y siempre lo será! Si te ayuda:
-- 📸 **Sígueme**: [@psteczka](https://www.instagram.com/psteczka) en Instagram
-- ⭐ **Dale estrella** a este repo en GitHub (¡realmente ayuda!)
-- 🐛 **Reporta problemas** para ayudar a mejorar la herramienta
+The tool does NOT navigate or reload pages (to keep the script alive).
 
 ---
 
-## Français
+## Quick Start (30 seconds)
 
-### 🚀 Démarrage Rapide
+Method A — Browser console (recommended):
+1) Go to Instagram → your profile → click “Following”
+2) Open DevTools Console:
+   - Windows/Linux: F12 or Ctrl+Shift+I
+   - macOS: Cmd+Option+I
+3) Copy & paste the entire script from instagram-unfollow-tool.js
+4) Press Enter, choose mode, click Start
 
-**Étape 1: Naviguez vers la Liste d'Abonnements**
-1. Cliquez sur votre **photo de profil** (en haut à droite)
-2. Cliquez sur **"Abonnements"** sur votre profil
-3. Attendez que la liste se charge
+Method B — Bookmarklet (one‑click):
+- Create a bookmark with this URL:
+```
+javascript:(function(){fetch('https://raw.githubusercontent.com/legolasek/Instagram-Bulk-Unfollow-Tool/main/instagram-unfollow-tool.js').then(r=>r.text()).then(eval)})();
+```
+- Open Instagram → your profile → “Following” → click the bookmark
 
-**Étape 2: Exécutez l'Outil**
-1. Appuyez sur **`F12`** pour ouvrir la Console Développeur
-2. **Copiez et collez** tout le script de [`instagram-unfollow-tool.js`](instagram-unfollow-tool.js)
-3. Appuyez sur **Entrée** et utilisez l'interface!
-
-### ✨ Fonctionnalités
-
-- 🎛️ **Interface professionnelle** avec statistiques en temps réel
-- 🛡️ **Limites sécurisées** (60/heure première heure, 40/heure après)
-- 🌍 **8 langues** détection automatique
-- 💾 **Sauvegarde automatique** de votre liste d'abonnements
-- 🤖 **Comportement humain** simulé
-- 🔍 **Mode test** pour essayer
-- 📊 **Statistiques en direct** et suivi des progrès
-
-### 💝 Soutenez le Développeur
-
-Cet outil est **100% GRATUIT** et le restera toujours! S'il vous aide:
-- 📸 **Suivez-moi**: [@psteczka](https://www.instagram.com/psteczka) sur Instagram
-- ⭐ **Étoile ce repo** sur GitHub (ça aide vraiment!)
-- 🐛 **Signalez les problèmes** pour aider à améliorer l'outil
+Mobile: Use Chrome/Firefox in Desktop Mode. Console support varies between devices.
 
 ---
 
-## Deutsch
+## Features
 
-### 🚀 Schnellstart
-
-**Schritt 1: Zur Following-Liste navigieren**
-1. Klicken Sie auf Ihr **Profilbild** (oben rechts)
-2. Klicken Sie auf **"Abonniert"** in Ihrem Profil
-3. Warten Sie, bis die Liste geladen ist
-
-**Schritt 2: Tool ausführen**
-1. Drücken Sie **`F12`** um die Entwicklerkonsole zu öffnen
-2. **Kopieren & einfügen** Sie das gesamte Skript von [`instagram-unfollow-tool.js`](instagram-unfollow-tool.js)
-3. Drücken Sie **Enter** und nutzen Sie die Benutzeroberfläche!
-
-### ✨ Funktionen
-
-- 🎛️ **Professionelle Benutzeroberfläche** mit Echtzeit-Statistiken
-- 🛡️ **Sichere Limits** (60/Stunde erste Stunde, 40/Stunde danach)
-- 🌍 **8 Sprachen** automatische Erkennung
-- 💾 **Automatisches Backup** Ihrer Following-Liste
-- 🤖 **Menschliches Verhalten** simuliert
-- 🔍 **Testmodus** zum Ausprobieren
-- 📊 **Live-Statistiken** und Fortschrittsverfolgung
-
-### 💝 Unterstützen Sie den Entwickler
-
-Dieses Tool ist **100% KOSTENLOS** und wird es immer bleiben! Wenn es hilft:
-- 📸 **Folgen Sie mir**: [@psteczka](https://www.instagram.com/psteczka) auf Instagram
-- ⭐ **Stern für dieses Repo** auf GitHub (hilft wirklich!)
-- 🐛 **Melden Sie Probleme** um das Tool zu verbessern
+- 🎛️ Instagram‑styled GUI (Start/Pause/Stop, live stats, progress bar)
+- 🌍 Multilingual UI (auto-detect: EN, ES, FR, DE, PT, PL, RU, IT)
+- 🔄 Loop‑safe algorithm:
+  - Click only “Following” state
+  - Confirm Unfollow strictly in dialog
+  - Wait for row to change to “Follow”
+  - Mark row processed; scroll to next
+- 🧠 Human-like behavior: random delays, hesitation/misclicks, natural scroll
+- 🛡️ Smart rate limits per mode + progressive slowdown
+- 📈 Live statistics: unfollowed, hourly, rate, elapsed time, daily progress
+- 🧱 No API, no login sharing, no installs — runs entirely in your browser
 
 ---
 
-## Português
+## Modes & Limits
 
-### 🚀 Início Rápido
+| Mode   | Hourly | Daily | Base delay (ms) |
+|--------|--------|-------|-----------------|
+| Safe   | 30/h   | 200   | 2800–5200       |
+| Normal | 50/h   | 350   | 1800–3600       |
+| Fast   | 70/h   | 450   | 1200–2400       |
 
-**Passo 1: Navegar para Lista de Seguindo**
-1. Clique na sua **foto de perfil** (canto superior direito)
-2. Clique em **"Seguindo"** no seu perfil
-3. Aguarde a lista carregar
+Extras:
+- Progressive slowdown: +400 ms every 100 unfollows
+- Breaks: short every 10, long every 50 unfollows (randomized)
 
-**Passo 2: Executar a Ferramenta**
-1. Pressione **`F12`** para abrir o Console do Desenvolvedor
-2. **Copie e cole** todo o script de [`instagram-unfollow-tool.js`](instagram-unfollow-tool.js)
-3. Pressione **Enter** e use a interface!
-
-### ✨ Características
-
-- 🎛️ **Interface profissional** com estatísticas em tempo real
-- 🛡️ **Limites seguros** (60/hora primeira hora, 40/hora depois)
-- 🌍 **8 idiomas** detecção automática
-- 💾 **Backup automático** da sua lista de seguindo
-- 🤖 **Comportamento humano** simulado
-- 🔍 **Modo teste** para experimentar
-- 📊 **Estatísticas ao vivo** e acompanhamento de progresso
-
-### 💝 Apoie o Desenvolvedor
-
-Esta ferramenta é **100% GRATUITA** e sempre será! Se ajuda você:
-- 📸 **Me siga**: [@psteczka](https://www.instagram.com/psteczka) no Instagram
-- ⭐ **Dê estrela** neste repo no GitHub (realmente ajuda!)
-- 🐛 **Reporte problemas** para ajudar a melhorar a ferramenta
+Tip: Start with Safe/Normal, then tune if your account tolerates more.
 
 ---
 
-## Polski
+## How it works (high level)
 
-### 🚀 Szybki Start
+1) Requires you to open the Following list manually  
+2) Finds “Following” buttons (never clicks “Follow”)  
+3) Clicks “Following”, waits for confirmation dialog, clicks “Unfollow”  
+4) Waits until the same row changes to “Follow” state  
+5) Marks row as processed and scrolls to the next one  
+6) Applies pacing rules (delays, breaks, hourly/daily limits)
 
-**Krok 1: Przejdź do Listy Obserwowanych**
-1. Kliknij swoje **zdjęcie profilowe** (prawy górny róg)
-2. Kliknij **"Obserwujesz"** na swoim profilu
-3. Poczekaj aż lista się załaduje
-
-**Krok 2: Uruchom Narzędzie**
-1. Naciśnij **`F12`** aby otworzyć Konsolę Dewelopera
-2. **Skopiuj i wklej** cały skrypt z [`instagram-unfollow-tool.js`](instagram-unfollow-tool.js)
-3. Naciśnij **Enter** i używaj interfejsu!
-
-### ✨ Funkcje
-
-- 🎛️ **Profesjonalny interfejs** ze statystykami na żywo
-- 🛡️ **Bezpieczne limity** (60/godzinę pierwsza godzina, 40/godzinę potem)
-- 🌍 **8 języków** automatyczne wykrywanie
-- 💾 **Automatyczny backup** twojej listy obserwowanych
-- 🤖 **Ludzkie zachowanie** symulowane
-- 🔍 **Tryb testowy** do sprawdzenia
-- 📊 **Statystyki na żywo** i śledzenie postępu
-
-### 💝 Wesprzyj Dewelopera
-
-To narzędzie jest **100% DARMOWE** i zawsze będzie! Jeśli pomaga:
-- 📸 **Obserwuj mnie**: [@psteczka](https://www.instagram.com/psteczka) na Instagram
-- ⭐ **Daj gwiazdkę** temu repo na GitHub (naprawdę pomaga!)
-- 🐛 **Zgłaszaj problemy** aby pomóc ulepszyć narzędzie
+This prevents the classic “unfollow → follow again” loop.
 
 ---
 
-## Русский
+## Safety & Best Practices
 
-### 🚀 Быстрый Старт
-
-**Шаг 1: Перейти к Списку Подписок**
-1. Нажмите на вашу **фотографию профиля** (верхний правый угол)
-2. Нажмите **"Подписки"** в вашем профиле
-3. Дождитесь загрузки списка
-
-**Шаг 2: Запустить Инструмент**
-1. Нажмите **`F12`** чтобы открыть Консоль Разработчика
-2. **Скопируйте и вставьте** весь скрипт из [`instagram-unfollow-tool.js`](instagram-unfollow-tool.js)
-3. Нажмите **Enter** и используйте интерфейс!
-
-### ✨ Функции
-
-- 🎛️ **Профессиональный интерфейс** со статистикой в реальном времени
-- 🛡️ **Безопасные лимиты** (60/час первый час, 40/час после)
-- 🌍 **8 языков** автоматическое определение
-- 💾 **Автоматический бэкап** вашего списка подписок
-- 🤖 **Человеческое поведение** симулировано
-- 🔍 **Тестовый режим** для проверки
-- 📊 **Живая статистика** и отслеживание прогресса
-
-### 💝 Поддержите Разработчика
-
-Этот инструмент **100% БЕСПЛАТНЫЙ** и всегда будет таким! Если помогает:
-- 📸 **Подпишитесь**: [@psteczka](https://www.instagram.com/psteczka) в Instagram
-- ⭐ **Поставьте звезду** этому репозиторию на GitHub (действительно помогает!)
-- 🐛 **Сообщайте о проблемах** чтобы помочь улучшить инструмент
+- Start small: test with 10–20 unfollows
+- Prefer Safe/Normal mode if you’ve been blocked recently
+- Mix with normal activity, avoid 24/7 automation
+- Stop immediately if you see “Action Blocked”, wait 24–48h
+- Use different times of day; take rest days
+- Respect hourly/daily limits shown in the GUI
 
 ---
 
-## Italiano
+## Troubleshooting
 
-### 🚀 Avvio Rapido
+- Script does nothing:
+  - Make sure you’re on your profile’s “Following” view (list open)
+  - Wait a few seconds until the list fully loads
+  - Scroll a bit and press Start again
+- It keeps “Searching for accounts…”:
+  - Switch language in Instagram settings or set CONFIG.LANGUAGE inside the script
+  - Make sure you’re not on a different page (e.g., “Followers”)
+- Action blocked:
+  - Switch to Safe, take longer breaks, try the next day
+- Mobile issues:
+  - Use Desktop Mode; some mobile browsers hide console features
 
-**Passo 1: Navigare alla Lista Seguiti**
-1. Clicca sulla tua **foto profilo** (in alto a destra)
-2. Clicca su **"Seguiti"** nel tuo profilo
-3. Aspetta che la lista si carichi
-
-**Passo 2: Eseguire lo Strumento**
-1. Premi **`F12`** per aprire la Console Sviluppatore
-2. **Copia e incolla** tutto lo script da [`instagram-unfollow-tool.js`](instagram-unfollow-tool.js)
-3. Premi **Invio** e usa l'interfaccia!
-
-### ✨ Caratteristiche
-
-- 🎛️ **Interfaccia professionale** con statistiche in tempo reale
-- 🛡️ **Limiti sicuri** (60/ora prima ora, 40/ora dopo)
-- 🌍 **8 lingue** rilevamento automatico
-- 💾 **Backup automatico** della tua lista seguiti
-- 🤖 **Comportamento umano** simulato
-- 🔍 **Modalità test** per provare
-- 📊 **Statistiche live** e monitoraggio progresso
-
-### 💝 Supporta lo Sviluppatore
-
-Questo strumento è **100% GRATUITO** e sempre lo sarà! Se ti aiuta:
-- 📸 **Seguimi**: [@psteczka](https://www.instagram.com/psteczka) su Instagram
-- ⭐ **Metti stella** a questo repo su GitHub (aiuta davvero!)
-- 🐛 **Segnala problemi** per aiutare a migliorare lo strumento
+If something still doesn’t work, open an Issue with details (IG language, browser/OS, console logs).
 
 ---
 
-## 🔧 Technical Details
+## Security & Privacy
 
-### System Requirements
-- ✅ Desktop browser (Chrome, Firefox, Safari, Edge)
-- ✅ Instagram account with following list
-- ✅ JavaScript enabled
+- No passwords, no external servers, nothing installed
+- Executes only in your browser, against the visible page (DOM)
+- Open source, auditable, and 100% FREE
 
-### Security & Privacy
-- 🔒 **No passwords required** - runs entirely in your browser
-- 🔒 **No external servers** - all data stays local
-- 🔒 **Open source** - fully auditable code
-- 🔒 **No tracking** - zero data collection
+---
 
-### Rate Limits
-- **First hour**: 60 unfollows maximum
-- **Subsequent hours**: 40 unfollows maximum
-- **Daily maximum**: 400 unfollows
-- **Auto-breaks**: Every 10 and 50 unfollows
+## FAQ
 
-## 📞 Support & Issues
+- Will I get banned?  
+  No one can guarantee it. We minimize risk with limits, delays and human-like behavior. Always respect limits and stop if Instagram warns you.
 
-- 🐛 **Bug Reports**: [Create an issue](https://github.com/legolasek/Instagram-Bulk-Unfollow-Tool/issues)
-- 💬 **Discussions**: [Join discussions](https://github.com/legolasek/Instagram-Bulk-Unfollow-Tool/discussions)
-- 📧 **Contact**: [@psteczka](https://www.instagram.com/psteczka) on Instagram
+- Can it run in the background or after page reload?  
+  No. Console scripts die on navigation/reload by design. Keep the page open.
 
-## 📄 License
+- Does it auto-navigate to Following?  
+  No — to keep the script alive. Please open “Following” manually.
 
-MIT License - This tool is and always will be **100% FREE**.
+- Can I customize behavior?  
+  Yes. Inside the script you can adjust mode, delays, randomization and breaks.
 
-## ⭐ Star History
+---
+
+## Languages
+
+This README is primarily in English. Quick‑start in multiple languages:
+
+- English  
+  Open your “Following” list → F12 → paste script → Enter → Start.  
+  100% FREE. If it helps: follow @psteczka and star the repo.
+
+- Español  
+  Abre tu lista de “Siguiendo” → F12 → pega el script → Enter → Iniciar.  
+  100% GRATIS. Si te ayuda: sigue a @psteczka y da estrella al repo.
+
+- Français  
+  Ouvrez “Abonnements” → F12 → collez le script → Entrée → Démarrer.  
+  100% GRATUIT. Si cela aide : suivez @psteczka et mettez une étoile.
+
+- Deutsch  
+  “Abonniert”-Liste öffnen → F12 → Skript einfügen → Enter → Starten.  
+  100% KOSTENLOS. Wenn es hilft: folge @psteczka und gib einen Stern.
+
+- Português  
+  Abra “Seguindo” → F12 → cole o script → Enter → Iniciar.  
+  100% GRÁTIS. Se ajudar: siga @psteczka e dê estrela no repositório.
+
+- Polski  
+  Otwórz “Obserwujesz” → F12 → wklej skrypt → Enter → Start.  
+  100% DARMOWE. Jeśli pomaga: zaobserwuj @psteczka i daj gwiazdkę repo.
+
+- Русский  
+  Откройте “Подписки” → F12 → вставьте скрипт → Enter → Старт.  
+  100% БЕСПЛАТНО. Если помогло: подпишитесь на @psteczka и поставьте звезду.
+
+- Italiano  
+  Apri “Seguiti” → F12 → incolla lo script → Invio → Inizia.  
+  100% GRATIS. Se aiuta: segui @psteczka e lascia una stella al repo.
+
+---
+
+## Contributing
+
+PRs welcome! Ideas:
+- More languages
+- Accessibility and UX improvements
+- New safe strategies and heuristics
+
+Please open an Issue/Discussion before large changes.
+
+---
+
+## License
+
+MIT — free to use, modify and share. This tool is and will remain 100% FREE.
+
+---
+
+## Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=legolasek/Instagram-Bulk-Unfollow-Tool&type=Date)](https://star-history.com/#legolasek/Instagram-Bulk-Unfollow-Tool&Date)
 
 ---
 
-**💝 Remember: This tool is completely FREE!**  
-**If it saves you hours of manual work, please:**
-- 📸 **Follow [@psteczka](https://www.instagram.com/psteczka)** on Instagram  
-- ⭐ **Star this repository** - it really helps other people discover this tool!
-
-*Made with ❤️ by [@psteczka](https://www.instagram.com/psteczka)*
+Made with ❤️ for the Instagram community  
+If this saved you hours, please:
+- 📸 Follow @psteczka on Instagram
+- ⭐ Give this repo a star so others can find it too
